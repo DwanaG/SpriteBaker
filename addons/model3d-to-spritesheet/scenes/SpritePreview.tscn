@@ -1,0 +1,33 @@
+[gd_scene load_steps=3 format=2]
+
+[ext_resource path="res://addons/model3d-to-spritesheet/scripts/sprite.gd" type="Script" id=1]
+[ext_resource path="res://addons/model3d-to-spritesheet/icons/shrink.svg" type="Texture" id=2]
+
+[node name="Sprite" type="TextureRect"]
+anchor_right = 1.0
+anchor_bottom = 1.0
+margin_right = -674.0
+margin_bottom = -250.0
+rect_min_size = Vector2( 350, 350 )
+stretch_mode = 6
+script = ExtResource( 1 )
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="Size" type="Button" parent="."]
+visible = false
+modulate = Color( 1, 1, 1, 0.501961 )
+anchor_left = 1.0
+anchor_top = 1.0
+anchor_right = 1.0
+anchor_bottom = 1.0
+margin_left = -28.0
+margin_top = -22.0
+grow_horizontal = 2
+grow_vertical = 2
+hint_tooltip = "Shrink"
+toggle_mode = true
+icon = ExtResource( 2 )
+flat = true
+[connection signal="toggled" from="Size" to="." method="_on_Size_toggled"]
