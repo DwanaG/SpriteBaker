@@ -1,0 +1,82 @@
+[gd_scene load_steps=5 format=2]
+
+[ext_resource path="res://addons/sprite-baker/scripts/frame_preview.gd" type="Script" id=1]
+
+[sub_resource type="StyleBoxFlat" id=1]
+bg_color = Color( 0.145098, 0.172549, 0.231373, 1 )
+corner_radius_top_left = 10
+corner_radius_top_right = 10
+
+[sub_resource type="StyleBoxFlat" id=2]
+content_margin_left = 10.0
+draw_center = false
+
+[sub_resource type="StyleBoxFlat" id=3]
+content_margin_left = 5.0
+content_margin_right = 5.0
+content_margin_top = 5.0
+content_margin_bottom = 5.0
+bg_color = Color( 0.196078, 0.231373, 0.309804, 1 )
+border_width_left = 3
+border_width_right = 3
+border_width_bottom = 3
+border_color = Color( 0.145098, 0.172549, 0.231373, 1 )
+corner_radius_bottom_right = 10
+corner_radius_bottom_left = 10
+anti_aliasing = false
+
+[node name="Frame" type="MarginContainer"]
+margin_right = 194.0
+margin_bottom = 176.0
+focus_mode = 2
+custom_constants/margin_right = 2
+custom_constants/margin_top = 2
+custom_constants/margin_left = 2
+custom_constants/margin_bottom = 2
+script = ExtResource( 1 )
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="Box" type="VBoxContainer" parent="."]
+margin_left = 2.0
+margin_top = 2.0
+margin_right = 192.0
+margin_bottom = 174.0
+mouse_filter = 2
+size_flags_horizontal = 3
+custom_constants/separation = 0
+
+[node name="TitleBar" type="Panel" parent="Box"]
+margin_right = 190.0
+margin_bottom = 30.0
+rect_min_size = Vector2( 0, 30 )
+rect_clip_content = true
+mouse_filter = 2
+custom_styles/panel = SubResource( 1 )
+
+[node name="TitleBox" type="HBoxContainer" parent="Box/TitleBar"]
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 0
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="Title" type="Label" parent="Box/TitleBar/TitleBox"]
+margin_top = 8.0
+margin_right = 190.0
+margin_bottom = 22.0
+size_flags_horizontal = 3
+custom_styles/normal = SubResource( 2 )
+text = "(Frame title)"
+
+[node name="Panel" type="PanelContainer" parent="Box"]
+margin_top = 30.0
+margin_right = 190.0
+margin_bottom = 172.0
+rect_min_size = Vector2( 0, 30 )
+rect_clip_content = true
+mouse_filter = 2
+size_flags_vertical = 3
+custom_styles/panel = SubResource( 3 )
