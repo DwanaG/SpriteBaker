@@ -2,12 +2,16 @@ tool
 extends Tree
 
 const Tools: Script = preload("tools.gd")
+const PlayIcon: Texture = preload("res://addons/sprite-baker/icons/play.svg")
+const StopIcon: Texture = preload("res://addons/sprite-baker/icons/stop.svg")
+const LoopIcon: Texture = preload("res://addons/sprite-baker/icons/loop.svg")
+const LoopActiveIcon: Texture = preload("res://addons/sprite-baker/icons/loop_active.svg")
+const ClearIcon: Texture = preload("res://addons/sprite-baker/icons/clear.svg")
 
 enum Column {PLAY, NAME, CHECK, LOOP, RESTORE_FPS, FPS, LENGTH, FRAMES}
 
 var frame_rate: float = 15.0
 var item_playing: TreeItem = null
-var anim_player: AnimationPlayer
 
 
 func _ready() -> void:
@@ -33,28 +37,29 @@ func _ready() -> void:
 	set_column_expand(Column.FRAMES, false)
 
 
-func show_model(model: Spatial) -> void:
+func update_model(model: Spatial) -> void:
 	clear()
 	item_playing = null
-	anim_player = Tools.find_single_node_by_type("AnimationPlayer", model)
+	var anim_player: AnimationPlayer = Tools.find_single_node_by_type("AnimationPlayer", model)
 	if anim_player:
 		var anim_list: PoolStringArray = anim_player.get_animation_list()
 		if anim_list.size() != 0:
-			populate_anim_tree(anim_list)
+			populate_anim_tree(anim_player, anim_list)
 
 
 func clear_model() -> void:
 	clear()
-	anim_player = null
 	item_playing = null
 
 
-func populate_anim_tree(anim_list: PoolStringArray) -> void:
+func populate_anim_tree(anim_player: AnimationPlayer, anim_list: PoolStringArray) -> void:
+	if Tools.is_node_being_edited(self):
+		return
 	var root: TreeItem = create_item()
 	for a_name in anim_list:
 		var item: TreeItem = create_item(root)
 
-		item.add_button(Column.PLAY, preload("res://addons/sprite-baker/icons/play.svg"), 0)
+		item.add_button(Column.PLAY, PlayIcon, 0)
 		item.set_metadata(Column.PLAY, false)
 		var splits: PoolStringArray = a_name.split("|")
 		var anim_name: String = splits[splits.size() - 1].strip_edges()
@@ -70,10 +75,10 @@ func populate_anim_tree(anim_list: PoolStringArray) -> void:
 		item.set_editable(Column.CHECK, true)
 		item.set_tooltip(Column.CHECK, "Selected animations will be considered for sprite sheet generation")
 		if is_loop:
-			item.add_button(Column.LOOP, preload("res://addons/sprite-baker/icons/loop_active.svg"), 0)
+			item.add_button(Column.LOOP, LoopActiveIcon, 0)
 			item.set_metadata(Column.LOOP, true)
 		else:
-			item.add_button(Column.LOOP, preload("res://addons/sprite-baker/icons/loop.svg"), 0)
+			item.add_button(Column.LOOP, LoopIcon, 0)
 			item.set_metadata(Column.LOOP, false)
 		item.set_tooltip(Column.LOOP, "Animation Looping")
 		item.set_metadata(Column.RESTORE_FPS, true)
@@ -107,18 +112,32 @@ func play_animation(item: TreeItem) -> void:
 		if item_playing:
 			stop_animation(item_playing, false)
 		var anim_name: String = item.get_metadata(Column.NAME)
-		for node in get_tree().get_nodes_in_group("3D2SS.Model"):
+		for node in get_tree().get_nodes_in_group("3D2SS.ModelAnimation"):
 			node.play_animation(anim_name)
 		item.set_metadata(Column.PLAY, true)
-		item.set_button(Column.PLAY, 0, preload("res://addons/sprite-baker/icons/stop.svg"))
+		item.set_button(Column.PLAY, 0, StopIcon)
 		item_playing = item
 
 
 func stop_animation(item: TreeItem, back_to_rest: bool) -> void:
-	for node in get_tree().get_nodes_in_group("3D2SS.Model"):
+	for node in get_tree().get_nodes_in_group("3D2SS.ModelAnimation"):
 		node.stop_animation(back_to_rest)
 	item.set_metadata(Column.PLAY, false)
-	item.set_button(Column.PLAY, 0, preload("res://addons/sprite-baker/icons/play.svg"))
+	item.set_button(Column.PLAY, 0, PlayIcon)
+
+
+func stop_item_playing() -> void:
+	item_playing.set_metadata(Column.PLAY, false)
+	item_playing.set_button(Column.PLAY, 0, PlayIcon)
+
+
+func set_item_playing_looping(loop: bool) -> void:
+	if item_playing:
+		if loop:
+			item_playing.set_button(Column.LOOP, 0, LoopActiveIcon)
+		else:
+			item_playing.set_button(Column.LOOP, 0, LoopIcon)
+		item_playing.set_metadata(Column.LOOP, loop)
 
 
 func _on_item_edited() -> void:
@@ -127,7 +146,7 @@ func _on_item_edited() -> void:
 	if col == Column.FPS:
 		set_num_frames(item)
 		if item.get_metadata(Column.RESTORE_FPS):
-			item.add_button(Column.RESTORE_FPS, preload("res://addons/sprite-baker/icons/clear.svg"), 0)
+			item.add_button(Column.RESTORE_FPS, ClearIcon, 0)
 			item.set_metadata(Column.RESTORE_FPS, false)
 
 
@@ -142,15 +161,14 @@ func _on_button_pressed(item: TreeItem, column: int, _id: int) -> void:
 	elif column == Column.LOOP:
 		var loop: bool = item.get_metadata(Column.LOOP)
 		if loop:
-			item.set_button(Column.LOOP, 0, preload("res://addons/sprite-baker/icons/loop.svg"))
+			item.set_button(Column.LOOP, 0, LoopIcon)
 		else:
-			item.set_button(Column.LOOP, 0, preload("res://addons/sprite-baker/icons/loop_active.svg"))
+			item.set_button(Column.LOOP, 0, LoopActiveIcon)
 		loop = not loop
 		item.set_metadata(Column.LOOP, loop)
 		var anim_name: String = item.get_metadata(Column.NAME)
-		for node in get_tree().get_nodes_in_group("3D2SS.Model"):
-			var anim = node.get_animation(anim_name)
-			anim.loop = loop
+		for node in get_tree().get_nodes_in_group("3D2SS.ModelAnimation"):
+			node.set_animation_loop(anim_name, loop)
 
 
 func _on_FPS_value_changed(value: float) -> void:

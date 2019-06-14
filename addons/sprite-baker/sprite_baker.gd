@@ -47,12 +47,12 @@ extends EditorPlugin
 var dialog: AcceptDialog
 
 func _enter_tree() -> void:
-	add_tool_menu_item("3D to Sprite sheet", self, "_on_tool_menu_pressed")
+	add_tool_menu_item("Sprite Baker", self, "_on_tool_menu_pressed")
 	get_dialog()
 
 
 func _exit_tree() -> void:
-	remove_tool_menu_item("3D to Sprite sheet")
+	remove_tool_menu_item("Sprite Baker")
 	if dialog:
 		remove_control_from_container(CONTAINER_TOOLBAR, dialog)
 		dialog.free()

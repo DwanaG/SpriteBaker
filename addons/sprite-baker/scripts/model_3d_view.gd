@@ -8,8 +8,8 @@ func _notification(what: int) -> void:
 			fit_model()
 
 
-func show_model(model: Spatial) -> void:
-	.show_model(model)
+func update_model(model: Spatial) -> void:
+	.update_model(model)
 	fit_model()
 
 

@@ -35,7 +35,7 @@ func _gui_input(event: InputEvent) -> void:
 			Input.set_mouse_mode(Input.MOUSE_MODE_VISIBLE)
 			warp_mouse(mouse_pos)
 	elif rotate && event is InputEventMouseMotion:
-		for node in get_tree().get_nodes_in_group("3D2SS.Model"):
+		for node in get_tree().get_nodes_in_group("3D2SS.ModelViewport"):
 			node.rotx += event.relative.x * LOOKAROUND_SPEED * rot_factor
 			node.roty += event.relative.y * LOOKAROUND_SPEED * rot_factor
 			node.get_node("Viewport3D/Scene3D").rotate_model(node.rotx, node.roty)
@@ -45,7 +45,7 @@ func _get_resolution() -> Vector2:
 	return self.rect_size
 
 
-func show_model(model: Spatial) -> void:
+func update_model(model: Spatial) -> void:
 	$Viewport3D/Scene3D.set_model(model.duplicate())
 	rotx = 0.0
 	roty = 0.0
@@ -56,25 +56,6 @@ func clear_model() -> void:
 	$Viewport3D/Scene3D.set_model(null)
 	process_gui = false
 
-
-func update_surface_material(surf_name: String, mat: Material) -> void:
-	for meshi in $Viewport3D/Scene3D.meshes:
-		var mesh: ArrayMesh = meshi.mesh
-		var index: int = mesh.surface_find_by_name(surf_name)
-		if index != -1:
-			(meshi as MeshInstance).set_surface_material(index, mat)
-
-
-func play_animation(anim_play: String) -> void:
-	$Viewport3D/Scene3D.play_animation(anim_play)
-
-
-func stop_animation(back_to_rest: bool) -> void:
-	$Viewport3D/Scene3D.stop_animation(back_to_rest)
-
-
-func get_animation(anim_name: String) -> Animation:
-	return $Viewport3D/Scene3D.anim_player.get_animation(anim_name)
 
 #	info_txt = ""
 #	if (get_parent() as TabContainer).current_tab == 0:

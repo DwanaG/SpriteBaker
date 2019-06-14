@@ -10,7 +10,7 @@ export(NodePath) var materials_list_path: NodePath
 onready var materials_list: BoxContainer = get_node(materials_list_path)
 
 
-func show_model(model: Spatial) -> void:
+func update_model(model: Spatial) -> void:
 	yield(get_tree(), "idle_frame")
 	Tools.clear_node(materials_list)
 	var list: Array = []

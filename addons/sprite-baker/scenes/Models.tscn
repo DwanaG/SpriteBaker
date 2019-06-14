@@ -10,7 +10,6 @@
 [ext_resource path="res://addons/sprite-baker/scripts/file_tree.gd" type="Script" id=8]
 [ext_resource path="res://addons/sprite-baker/scripts/loader.gd" type="Script" id=9]
 
-
 [sub_resource type="StyleBoxFlat" id=1]
 bg_color = Color( 0.145098, 0.172549, 0.231373, 1 )
 border_width_left = 2
@@ -300,8 +299,8 @@ margin_bottom = 326.0
 [node name="DropRight" parent="." index="3"]
 margin_right = 254.0
 margin_bottom = 326.0
-[connection signal="files_updated" from="Box/Panel/Content/ModelsBox/PathBox/FolderPath" to="Box/Panel/Content/ModelsBox/FoundModels/FileTree" method="_on_FolderPath_files_updated"]
 [connection signal="files_updated" from="Box/Panel/Content/ModelsBox/PathBox/FolderPath" to="Box/Panel/Content/ModelsBox" method="_on_FolderPath_files_updated"]
+[connection signal="files_updated" from="Box/Panel/Content/ModelsBox/PathBox/FolderPath" to="Box/Panel/Content/ModelsBox/FoundModels/FileTree" method="_on_FolderPath_files_updated"]
 [connection signal="pressed" from="Box/Panel/Content/ModelsBox/PathBox/SearchFolder" to="Box/Panel/Content/ModelsBox" method="_on_SearchFolder_pressed"]
 [connection signal="pressed" from="Box/Panel/Content/ModelsBox/LoadBox/Load" to="Box/Panel/Content/ModelsBox" method="_on_Load_pressed"]
 [connection signal="pressed" from="Box/Panel/Content/ModelsBox/LoadBox/LoadAll" to="Box/Panel/Content/ModelsBox" method="_on_LoadAll_pressed"]

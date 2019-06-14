@@ -16,8 +16,8 @@ func _notification(what: int) -> void:
 		self.rect_pivot_offset = self.rect_size * 0.5
 
 
-func show_model(model: Spatial) -> void:
-	.show_model(model)
+func update_model(model: Spatial) -> void:
+	.update_model(model)
 	adjust_viewport()
 
 

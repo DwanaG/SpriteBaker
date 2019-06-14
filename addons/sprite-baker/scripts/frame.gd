@@ -9,7 +9,6 @@ const TITLE_SCROLL_SENSITIVITY: int = 5
 
 export(String) var title: String = "(Frame title)" setget set_title, get_title
 export(PackedScene) var preview_scn: PackedScene
-#export(String, FILE, "*.tscn; TSCN, *.scn; SCN, *.res; RES") var preview_scn_path: String
 export(NodePath) var title_path: NodePath
 export(NodePath) var title_box_path: NodePath
 export(NodePath) var min_title_path: NodePath

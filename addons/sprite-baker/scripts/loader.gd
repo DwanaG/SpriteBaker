@@ -96,4 +96,4 @@ func select(id: int) -> void:
 	var file: String = files[id]
 	var model: Spatial = models_dict[file]
 	for node in get_tree().get_nodes_in_group("3D2SS.ModelData"):
-		node.show_model(model)
+		node.update_model(model)

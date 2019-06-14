@@ -1,101 +1,91 @@
-[gd_scene load_steps=10 format=2]
+[gd_scene load_steps=15 format=2]
 
 [ext_resource path="res://addons/sprite-baker/scenes/Frame.tscn" type="PackedScene" id=1]
 [ext_resource path="res://addons/sprite-baker/scripts/preview.gd" type="Script" id=2]
 [ext_resource path="res://addons/sprite-baker/scenes/Scene3D.tscn" type="PackedScene" id=3]
 [ext_resource path="res://addons/sprite-baker/scripts/model_3d_view.gd" type="Script" id=4]
 [ext_resource path="res://addons/sprite-baker/scripts/sprite_view.gd" type="Script" id=5]
-
+[ext_resource path="res://addons/sprite-baker/scripts/bones_tree.gd" type="Script" id=6]
+[ext_resource path="res://addons/sprite-baker/icons/icon_clear.svg" type="Texture" id=7]
+[ext_resource path="res://addons/sprite-baker/scenes/Timeline.tscn" type="PackedScene" id=8]
+[ext_resource path="res://addons/sprite-baker/icons/stop.svg" type="Texture" id=9]
+[ext_resource path="res://addons/sprite-baker/icons/play.svg" type="Texture" id=10]
+[ext_resource path="res://addons/sprite-baker/icons/loop.svg" type="Texture" id=11]
 
 [sub_resource type="StyleBoxEmpty" id=1]
 
-[sub_resource type="StyleBoxFlat" id=2]
-bg_color = Color( 0.105882, 0.129412, 0.282353, 1 )
-corner_radius_top_left = 1
-corner_radius_top_right = 1
-corner_radius_bottom_right = 1
-corner_radius_bottom_left = 1
+[sub_resource type="StyleBoxEmpty" id=2]
 
-[sub_resource type="StyleBoxFlat" id=3]
-bg_color = Color( 0.219608, 0.211765, 0.227451, 1 )
-border_width_left = 1
-border_width_top = 1
-border_width_right = 1
-border_width_bottom = 1
-border_color = Color( 0.262745, 0.258824, 0.270588, 1 )
-border_blend = true
-corner_radius_top_left = 1
-corner_radius_top_right = 1
-corner_radius_bottom_right = 1
-corner_radius_bottom_left = 1
-shadow_color = Color( 0.145098, 0.145098, 0.145098, 1 )
-shadow_size = 3
-
-[sub_resource type="StyleBoxFlat" id=4]
-bg_color = Color( 0.196078, 0.223529, 0.278431, 1 )
-border_width_left = 1
-border_width_top = 1
-border_width_right = 1
-border_width_bottom = 1
-border_color = Color( 0.145098, 0.172549, 0.231373, 1 )
+[sub_resource type="StyleBoxEmpty" id=3]
 
 [node name="Preview" index="0" instance=ExtResource( 1 )]
-anchor_right = 0.201172
+anchor_right = 0.0869141
 margin_right = 287.0
 margin_bottom = 569.0
 title = "Preview"
 
 [node name="Box" parent="." index="0"]
-margin_right = 491.0
+margin_right = 374.0
 margin_bottom = 567.0
 
 [node name="TitleBar" parent="Box" index="0"]
-margin_right = 489.0
+margin_right = 372.0
 
 [node name="Title" parent="Box/TitleBar/TitleBox" index="0"]
-margin_right = 420.0
+margin_right = 303.0
 text = "Preview"
 
 [node name="MoveLeft" parent="Box/TitleBar/TitleBox" index="1"]
-margin_left = 424.0
-margin_right = 440.0
+margin_left = 307.0
+margin_right = 323.0
 
 [node name="MoveRight" parent="Box/TitleBar/TitleBox" index="2"]
-margin_left = 444.0
-margin_right = 460.0
+margin_left = 327.0
+margin_right = 343.0
 
 [node name="Minimize" parent="Box/TitleBar/TitleBox" index="3"]
-margin_left = 464.0
-margin_right = 480.0
+margin_left = 347.0
+margin_right = 363.0
 
 [node name="Margin" parent="Box/TitleBar/TitleBox" index="4"]
-margin_left = 484.0
-margin_right = 489.0
+margin_left = 367.0
+margin_right = 372.0
 
 [node name="Panel" parent="Box" index="1"]
-margin_right = 489.0
+margin_right = 372.0
 margin_bottom = 565.0
 
 [node name="Content" parent="Box/Panel" index="0"]
-margin_right = 484.0
+margin_right = 367.0
 margin_bottom = 530.0
 
-[node name="PreviewBox" type="VSplitContainer" parent="Box/Panel/Content" index="0"]
-margin_right = 479.0
+[node name="PreviewBox" type="VSplitContainer" parent="Box/Panel/Content" index="0" groups=[
+"3D2SS.ModelData",
+"3D2SS.ModelAnimation",
+]]
+margin_right = 362.0
 margin_bottom = 525.0
 rect_min_size = Vector2( 1, 0 )
 size_flags_horizontal = 3
 size_flags_vertical = 3
 split_offset = 200
 script = ExtResource( 2 )
-pixel_density_path = NodePath("OptionsScroll/OptionsList/PixelDensityBox/PixelDensity")
+pixel_density_path = NodePath("OptionsScroll/OptionsGrid/PixelDensity")
+root_motion_dialog_path = NodePath("OptionsScroll/OptionsGrid/RootMotionBox/RootMotion/RootMotionDialog")
+root_motion_clear_path = NodePath("OptionsScroll/OptionsGrid/RootMotionBox/RootMotionClear")
+root_motion_path = NodePath("OptionsScroll/OptionsGrid/RootMotionBox/RootMotion")
+timeline_path = NodePath("Box/ControlsBox/Timeline")
+play_path = NodePath("Box/ControlsBox/PlayBox/Play")
+stop_path = NodePath("Box/ControlsBox/PlayBox/Stop")
+time_spin_path = NodePath("Box/ControlsBox/Box/Time")
+loop_path = NodePath("Box/ControlsBox/Box/Loop")
 
 [node name="Box" type="VBoxContainer" parent="Box/Panel/Content/PreviewBox" index="0"]
-margin_right = 479.0
-margin_bottom = 370.0
+margin_right = 362.0
+margin_bottom = 422.0
 
 [node name="TabContainer" type="TabContainer" parent="Box/Panel/Content/PreviewBox/Box" index="0"]
-margin_right = 479.0
+margin_right = 362.0
 margin_bottom = 350.0
 rect_min_size = Vector2( 150, 150 )
 size_flags_vertical = 3
@@ -103,7 +93,7 @@ tab_align = 0
 
 [node name="3D View" type="ViewportContainer" parent="Box/Panel/Content/PreviewBox/Box/TabContainer" index="0" groups=[
 "3D2SS.ModelData",
-"3D2SS.Model",
+"3D2SS.ModelViewport",
 ]]
 anchor_right = 1.0
 anchor_bottom = 1.0
@@ -115,7 +105,7 @@ stretch = true
 script = ExtResource( 4 )
 
 [node name="Viewport3D" type="Viewport" parent="Box/Panel/Content/PreviewBox/Box/TabContainer/3D View" index="0"]
-size = Vector2( 471, 314 )
+size = Vector2( 354, 314 )
 own_world = true
 transparent_bg = true
 handle_input_locally = false
@@ -135,18 +125,20 @@ custom_styles/panel = SubResource( 1 )
 
 [node name="SpriteView" type="ViewportContainer" parent="Box/Panel/Content/PreviewBox/Box/TabContainer/Sprite" index="0" groups=[
 "3D2SS.ModelData",
-"3D2SS.Model",
+"3D2SS.ModelViewport",
 ]]
 anchor_left = 0.5
 anchor_top = 0.5
 anchor_right = 0.5
 anchor_bottom = 0.5
-margin_left = -0.5
-margin_right = 0.5
+margin_left = -39.0
+margin_top = -35.0
+margin_right = 39.0
+margin_bottom = 35.0
 grow_horizontal = 2
 grow_vertical = 2
-rect_scale = Vector2( 471, 471 )
-rect_pivot_offset = Vector2( 0.5, 0 )
+rect_scale = Vector2( 4.48571, 4.48571 )
+rect_pivot_offset = Vector2( 39, 35 )
 stretch = true
 script = ExtResource( 5 )
 __meta__ = {
@@ -154,7 +146,7 @@ __meta__ = {
 }
 
 [node name="Viewport3D" type="Viewport" parent="Box/Panel/Content/PreviewBox/Box/TabContainer/Sprite/SpriteView" index="0"]
-size = Vector2( 1, 0 )
+size = Vector2( 78, 70 )
 own_world = true
 transparent_bg = true
 handle_input_locally = false
@@ -162,57 +154,91 @@ render_target_update_mode = 0
 
 [node name="Scene3D" parent="Box/Panel/Content/PreviewBox/Box/TabContainer/Sprite/SpriteView/Viewport3D" index="0" instance=ExtResource( 3 )]
 
-[node name="Info" type="HBoxContainer" parent="Box/Panel/Content/PreviewBox/Box" index="1"]
+[node name="ControlsBox" type="HBoxContainer" parent="Box/Panel/Content/PreviewBox/Box" index="1"]
 margin_top = 354.0
-margin_right = 479.0
-margin_bottom = 370.0
+margin_right = 362.0
+margin_bottom = 408.0
 
-[node name="ProgressBar" type="ProgressBar" parent="Box/Panel/Content/PreviewBox/Box/Info" index="0"]
-margin_right = 60.0
-margin_bottom = 16.0
-rect_min_size = Vector2( 60, 0 )
-size_flags_vertical = 1
-custom_styles/fg = SubResource( 2 )
-custom_styles/bg = SubResource( 3 )
-percent_visible = false
+[node name="PlayBox" type="VBoxContainer" parent="Box/Panel/Content/PreviewBox/Box/ControlsBox" index="0"]
+margin_right = 28.0
+margin_bottom = 54.0
+size_flags_vertical = 3
+alignment = 2
 
-[node name="InfoLabel" type="Label" parent="Box/Panel/Content/PreviewBox/Box/Info" index="1"]
-margin_left = 64.0
-margin_right = 479.0
-margin_bottom = 16.0
+[node name="Play" type="Button" parent="Box/Panel/Content/PreviewBox/Box/ControlsBox/PlayBox" index="0"]
+margin_top = 6.0
+margin_right = 28.0
+margin_bottom = 28.0
+disabled = true
+icon = ExtResource( 10 )
+
+[node name="Stop" type="Button" parent="Box/Panel/Content/PreviewBox/Box/ControlsBox/PlayBox" index="1"]
+margin_top = 32.0
+margin_right = 28.0
+margin_bottom = 54.0
+disabled = true
+icon = ExtResource( 9 )
+
+[node name="Timeline" parent="Box/Panel/Content/PreviewBox/Box/ControlsBox" index="1" instance=ExtResource( 8 )]
+margin_left = 32.0
+margin_right = 284.0
+margin_bottom = 54.0
 size_flags_horizontal = 3
-size_flags_vertical = 1
-custom_styles/normal = SubResource( 4 )
+
+[node name="Box" type="VBoxContainer" parent="Box/Panel/Content/PreviewBox/Box/ControlsBox" index="2"]
+margin_left = 288.0
+margin_right = 362.0
+margin_bottom = 54.0
+alignment = 2
+
+[node name="Loop" type="Button" parent="Box/Panel/Content/PreviewBox/Box/ControlsBox/Box" index="0"]
+margin_left = 23.0
+margin_top = 4.0
+margin_right = 51.0
+margin_bottom = 26.0
+size_flags_horizontal = 4
+disabled = true
+toggle_mode = true
+icon = ExtResource( 11 )
+
+[node name="Time" type="SpinBox" parent="Box/Panel/Content/PreviewBox/Box/ControlsBox/Box" index="1"]
+margin_top = 30.0
+margin_right = 74.0
+margin_bottom = 54.0
+max_value = 1.0
+step = 0.01
+editable = false
+suffix = "s"
+
+[node name="Separator" type="HSeparator" parent="Box/Panel/Content/PreviewBox/Box" index="2"]
+margin_top = 412.0
+margin_right = 362.0
+margin_bottom = 422.0
+custom_styles/separator = SubResource( 2 )
+custom_constants/separation = 10
 
 [node name="OptionsScroll" type="ScrollContainer" parent="Box/Panel/Content/PreviewBox" index="1"]
-margin_top = 382.0
-margin_right = 479.0
+margin_top = 434.0
+margin_right = 362.0
 margin_bottom = 525.0
 size_flags_vertical = 3
 
-[node name="OptionsList" type="ItemList" parent="Box/Panel/Content/PreviewBox/OptionsScroll" index="0"]
-margin_right = 479.0
-margin_bottom = 143.0
+[node name="OptionsGrid" type="GridContainer" parent="Box/Panel/Content/PreviewBox/OptionsScroll" index="0"]
+margin_right = 401.0
+margin_bottom = 79.0
 size_flags_horizontal = 3
 size_flags_vertical = 3
+columns = 5
 
-[node name="PixelDensityBox" type="HBoxContainer" parent="Box/Panel/Content/PreviewBox/OptionsScroll/OptionsList" index="1"]
-margin_right = 162.0
-margin_bottom = 24.0
-custom_constants/separation = 3
-__meta__ = {
-"_edit_use_anchors_": false
-}
-
-[node name="PixelDensityLabel" type="Label" parent="Box/Panel/Content/PreviewBox/OptionsScroll/OptionsList/PixelDensityBox" index="0"]
+[node name="PixelDensityLabel" type="Label" parent="Box/Panel/Content/PreviewBox/OptionsScroll/OptionsGrid" index="0"]
 margin_top = 5.0
-margin_right = 84.0
+margin_right = 115.0
 margin_bottom = 19.0
 text = "Pixel Density"
 
-[node name="PixelDensity" type="SpinBox" parent="Box/Panel/Content/PreviewBox/OptionsScroll/OptionsList/PixelDensityBox" index="1"]
-margin_left = 87.0
-margin_right = 161.0
+[node name="PixelDensity" type="SpinBox" parent="Box/Panel/Content/PreviewBox/OptionsScroll/OptionsGrid" index="1"]
+margin_left = 119.0
+margin_right = 247.0
 margin_bottom = 24.0
 size_flags_vertical = 4
 min_value = 1.0
@@ -220,20 +246,128 @@ max_value = 7680.0
 value = 32.0
 allow_greater = true
 
+[node name="Separator1" type="VSeparator" parent="Box/Panel/Content/PreviewBox/OptionsScroll/OptionsGrid" index="2"]
+margin_left = 251.0
+margin_right = 276.0
+margin_bottom = 24.0
+custom_styles/separator = SubResource( 3 )
+custom_constants/separation = 25
+
+[node name="MarginLabel" type="Label" parent="Box/Panel/Content/PreviewBox/OptionsScroll/OptionsGrid" index="3"]
+margin_left = 280.0
+margin_top = 5.0
+margin_right = 323.0
+margin_bottom = 19.0
+text = "Margin"
+
+[node name="Margin" type="SpinBox" parent="Box/Panel/Content/PreviewBox/OptionsScroll/OptionsGrid" index="4"]
+margin_left = 327.0
+margin_right = 401.0
+margin_bottom = 24.0
+size_flags_vertical = 4
+max_value = 7680.0
+allow_greater = true
+suffix = "px"
+
+[node name="RootMotionLabel" type="Label" parent="Box/Panel/Content/PreviewBox/OptionsScroll/OptionsGrid" index="5"]
+margin_top = 32.0
+margin_right = 115.0
+margin_bottom = 46.0
+text = "Root Motion Track"
+
+[node name="RootMotionBox" type="HBoxContainer" parent="Box/Panel/Content/PreviewBox/OptionsScroll/OptionsGrid" index="6"]
+margin_left = 119.0
+margin_top = 28.0
+margin_right = 247.0
+margin_bottom = 50.0
+custom_constants/separation = 0
+
+[node name="RootMotion" type="Button" parent="Box/Panel/Content/PreviewBox/OptionsScroll/OptionsGrid/RootMotionBox" index="0"]
+margin_top = 1.0
+margin_right = 100.0
+margin_bottom = 21.0
+rect_min_size = Vector2( 100, 0 )
+size_flags_horizontal = 3
+size_flags_vertical = 4
+disabled = true
+text = "Assign..."
+clip_text = true
+
+[node name="RootMotionDialog" type="ConfirmationDialog" parent="Box/Panel/Content/PreviewBox/OptionsScroll/OptionsGrid/RootMotionBox/RootMotion" index="0"]
+margin_left = 10.0
+margin_top = -407.0
+margin_right = 350.0
+margin_bottom = 93.0
+window_title = "Edit Root Motion Track"
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="Scroll" type="ScrollContainer" parent="Box/Panel/Content/PreviewBox/OptionsScroll/OptionsGrid/RootMotionBox/RootMotion/RootMotionDialog" index="3"]
+anchor_right = 1.0
+anchor_bottom = 1.0
+margin_left = 8.0
+margin_top = 8.0
+margin_right = -8.0
+margin_bottom = -36.0
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="BonesTree" type="Tree" parent="Box/Panel/Content/PreviewBox/OptionsScroll/OptionsGrid/RootMotionBox/RootMotion/RootMotionDialog/Scroll" index="0" groups=[
+"3D2SS.ModelData",
+]]
+margin_right = 324.0
+margin_bottom = 456.0
+size_flags_horizontal = 3
+size_flags_vertical = 3
+custom_constants/draw_relationship_lines = 1
+select_mode = 1
+script = ExtResource( 6 )
+root_motion_button_path = NodePath("../../..")
+
+[node name="RootMotionClear" type="Button" parent="Box/Panel/Content/PreviewBox/OptionsScroll/OptionsGrid/RootMotionBox" index="1"]
+margin_left = 100.0
+margin_right = 128.0
+margin_bottom = 22.0
+disabled = true
+icon = ExtResource( 7 )
+clip_text = true
+
+[node name="Separator2" type="VSeparator" parent="Box/Panel/Content/PreviewBox/OptionsScroll/OptionsGrid" index="7"]
+margin_left = 251.0
+margin_top = 28.0
+margin_right = 276.0
+margin_bottom = 50.0
+custom_styles/separator = SubResource( 3 )
+custom_constants/separation = 25
+
 [node name="MinBar" parent="." index="1"]
-margin_right = 491.0
+margin_right = 374.0
 margin_bottom = 567.0
 
 [node name="Title" parent="MinBar/TitleBox/Panel" index="0"]
 text = "Preview"
 
 [node name="DropLeft" parent="." index="2"]
-margin_right = 491.0
+margin_right = 374.0
 margin_bottom = 567.0
 
 [node name="DropRight" parent="." index="3"]
-margin_right = 491.0
+margin_right = 374.0
 margin_bottom = 567.0
 [connection signal="resized" from="Box/Panel/Content/PreviewBox/Box/TabContainer/Sprite" to="Box/Panel/Content/PreviewBox/Box/TabContainer/Sprite/SpriteView" method="_on_Sprite_resized"]
 [connection signal="pixel_density_changed" from="Box/Panel/Content/PreviewBox/Box/TabContainer/Sprite/SpriteView" to="Box/Panel/Content/PreviewBox" method="_on_SpriteView_pixel_density_changed"]
-[connection signal="value_changed" from="Box/Panel/Content/PreviewBox/OptionsScroll/OptionsList/PixelDensityBox/PixelDensity" to="Box/Panel/Content/PreviewBox/Box/TabContainer/Sprite/SpriteView" method="_on_PixelDensity_value_changed"]
+[connection signal="pressed" from="Box/Panel/Content/PreviewBox/Box/ControlsBox/PlayBox/Play" to="Box/Panel/Content/PreviewBox" method="_on_Play_pressed"]
+[connection signal="pressed" from="Box/Panel/Content/PreviewBox/Box/ControlsBox/PlayBox/Stop" to="Box/Panel/Content/PreviewBox" method="_on_Stop_pressed"]
+[connection signal="animation_finished" from="Box/Panel/Content/PreviewBox/Box/ControlsBox/Timeline" to="Box/Panel/Content/PreviewBox" method="_on_Timeline_animation_finished"]
+[connection signal="time_changed" from="Box/Panel/Content/PreviewBox/Box/ControlsBox/Timeline" to="Box/Panel/Content/PreviewBox" method="_on_Timeline_time_changed"]
+[connection signal="toggled" from="Box/Panel/Content/PreviewBox/Box/ControlsBox/Box/Loop" to="Box/Panel/Content/PreviewBox" method="_on_Loop_toggled"]
+[connection signal="value_changed" from="Box/Panel/Content/PreviewBox/Box/ControlsBox/Box/Time" to="Box/Panel/Content/PreviewBox" method="_on_Time_value_changed"]
+[connection signal="value_changed" from="Box/Panel/Content/PreviewBox/OptionsScroll/OptionsGrid/PixelDensity" to="Box/Panel/Content/PreviewBox/Box/TabContainer/Sprite/SpriteView" method="_on_PixelDensity_value_changed"]
+[connection signal="value_changed" from="Box/Panel/Content/PreviewBox/OptionsScroll/OptionsGrid/Margin" to="Box/Panel/Content/PreviewBox/Box/TabContainer/Sprite/SpriteView" method="_on_PixelDensity_value_changed"]
+[connection signal="pressed" from="Box/Panel/Content/PreviewBox/OptionsScroll/OptionsGrid/RootMotionBox/RootMotion" to="Box/Panel/Content/PreviewBox" method="_on_RootMotion_pressed"]
+[connection signal="confirmed" from="Box/Panel/Content/PreviewBox/OptionsScroll/OptionsGrid/RootMotionBox/RootMotion/RootMotionDialog" to="Box/Panel/Content/PreviewBox/OptionsScroll/OptionsGrid/RootMotionBox/RootMotion/RootMotionDialog/Scroll/BonesTree" method="_on_RootMotionDialog_confirmed"]
+[connection signal="item_activated" from="Box/Panel/Content/PreviewBox/OptionsScroll/OptionsGrid/RootMotionBox/RootMotion/RootMotionDialog/Scroll/BonesTree" to="Box/Panel/Content/PreviewBox/OptionsScroll/OptionsGrid/RootMotionBox/RootMotion/RootMotionDialog/Scroll/BonesTree" method="_on_item_activated"]
+[connection signal="root_motion_selected" from="Box/Panel/Content/PreviewBox/OptionsScroll/OptionsGrid/RootMotionBox/RootMotion/RootMotionDialog/Scroll/BonesTree" to="Box/Panel/Content/PreviewBox" method="_on_BonesTree_root_motion_selected"]
+[connection signal="pressed" from="Box/Panel/Content/PreviewBox/OptionsScroll/OptionsGrid/RootMotionBox/RootMotionClear" to="Box/Panel/Content/PreviewBox" method="_on_RootMotionClear_pressed"]
