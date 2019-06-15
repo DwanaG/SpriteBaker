@@ -17,6 +17,10 @@ export(NodePath) var play_path: NodePath
 export(NodePath) var stop_path: NodePath
 export(NodePath) var time_spin_path: NodePath
 export(NodePath) var loop_path: NodePath
+export(NodePath) var front_view_path: NodePath
+export(NodePath) var rx_spin_path: NodePath
+export(NodePath) var ry_spin_path: NodePath
+export(ButtonGroup) var view_buttons_group: ButtonGroup
 
 onready var root_motion_clear: Button = get_node(root_motion_clear_path)
 onready var root_motion: Button = get_node(root_motion_path)
@@ -25,13 +29,18 @@ onready var play: Button = get_node(play_path)
 onready var stop: Button = get_node(stop_path)
 onready var time_spin: SpinBox = get_node(time_spin_path)
 onready var loop: Button = get_node(loop_path)
+onready var rx_spin: SpinBox = get_node(rx_spin_path)
+onready var ry_spin: SpinBox = get_node(ry_spin_path)
 
 var anim_player: AnimationPlayer
 var current_animation: String = ""
+var pressed_view_button: Button
 
 
 func update_model(model: Spatial) -> void:
 	anim_player = Tools.find_single_node_by_type("AnimationPlayer", model)
+	pressed_view_button = get_node(front_view_path)
+	pressed_view_button.pressed = true
 	if current_animation != "":
 		stop_animation(true)
 
@@ -41,6 +50,7 @@ func clear_model() -> void:
 	anim_player = null
 	stop_animation(true)
 	timeline.clear()
+	deselect_views()
 
 
 func get_animation(anim_name: String) -> Animation:
@@ -97,6 +107,17 @@ func set_animation_loop(anim_name: String, value: bool) -> void:
 		else:
 			loop.icon = LoopIcon
 			loop.pressed = false
+
+
+func rotate_model(rx: float, ry: float) -> void:
+	deselect_views()
+	rx_spin.value = rad2deg(rx)
+	ry_spin.value = rad2deg(ry)
+
+
+func deselect_views() -> void:
+	for button in view_buttons_group.get_buttons():
+		button.pressed = false
 
 
 func _on_SpriteView_pixel_density_changed(value: float) -> void:
@@ -160,3 +181,46 @@ func _on_Loop_toggled(button_pressed: bool) -> void:
 
 func _on_Timeline_animation_finished() -> void:
 	play.icon = PlayIcon
+
+
+func _on_view_pressed() -> void:
+	var button: Button = view_buttons_group.get_pressed_button()
+	if not button:
+		pressed_view_button.pressed = true
+		return
+	var view: String = button.name
+	var rotx: float
+	var roty: float
+	match view:
+		"Front":
+			rotx = 0.0
+			roty = 0.0
+		"Rear":
+			rotx = PI
+			roty = 0.0
+		"Left":
+			rotx = -PI * 0.5
+			roty = 0.0
+		"Right":
+			rotx = PI * 0.5
+			roty = 0.0
+		"Top":
+			rotx = PI
+			roty = -PI * 0.5
+	for node in get_tree().get_nodes_in_group("3D2SS.ModelViewport"):
+		if node == self:
+			rx_spin.value = rad2deg(rotx)
+			ry_spin.value = rad2deg(roty)
+			continue
+		node.rotate_model(rotx, roty)
+	pressed_view_button = button
+
+
+func _on_rot_value_changed(_value: float) -> void:
+	deselect_views()
+	var rotx: float = deg2rad(rx_spin.value)
+	var roty: float = deg2rad(ry_spin.value)
+	for node in get_tree().get_nodes_in_group("3D2SS.ModelViewport"):
+		if node == self:
+			continue
+		node.rotate_model(rotx, roty)

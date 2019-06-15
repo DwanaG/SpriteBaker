@@ -35,10 +35,10 @@ func _gui_input(event: InputEvent) -> void:
 			Input.set_mouse_mode(Input.MOUSE_MODE_VISIBLE)
 			warp_mouse(mouse_pos)
 	elif rotate && event is InputEventMouseMotion:
+		rotx += event.relative.x * LOOKAROUND_SPEED * rot_factor
+		roty += event.relative.y * LOOKAROUND_SPEED * rot_factor
 		for node in get_tree().get_nodes_in_group("3D2SS.ModelViewport"):
-			node.rotx += event.relative.x * LOOKAROUND_SPEED * rot_factor
-			node.roty += event.relative.y * LOOKAROUND_SPEED * rot_factor
-			node.get_node("Viewport3D/Scene3D").rotate_model(node.rotx, node.roty)
+			node.rotate_model(rotx, roty)
 
 
 func _get_resolution() -> Vector2:
@@ -55,6 +55,12 @@ func update_model(model: Spatial) -> void:
 func clear_model() -> void:
 	$Viewport3D/Scene3D.set_model(null)
 	process_gui = false
+
+
+func rotate_model(rx: float, ry: float) -> void:
+	rotx = wrapf(rx, -PI, PI)
+	roty = wrapf(ry, -PI, PI)
+	$Viewport3D/Scene3D.rotate_model(rotx, roty)
 
 
 #	info_txt = ""

@@ -1,9 +1,9 @@
 [gd_scene load_steps=7 format=2]
 
 [ext_resource path="res://addons/sprite-baker/scripts/frames_container.gd" type="Script" id=1]
-[ext_resource path="res://addons/sprite-baker/scenes/Models.tscn" type="PackedScene" id=2]
+[ext_resource path="res://addons/sprite-baker/scenes/Materials.tscn" type="PackedScene" id=2]
 [ext_resource path="res://addons/sprite-baker/scenes/Animations.tscn" type="PackedScene" id=3]
-[ext_resource path="res://addons/sprite-baker/scenes/Materials.tscn" type="PackedScene" id=4]
+[ext_resource path="res://addons/sprite-baker/scenes/Models.tscn" type="PackedScene" id=4]
 [ext_resource path="res://addons/sprite-baker/scenes/Preview.tscn" type="PackedScene" id=5]
 
 [sub_resource type="StyleBoxLine" id=1]
@@ -21,7 +21,7 @@ custom_constants/margin_top = 10
 custom_constants/margin_left = 10
 custom_constants/margin_bottom = 10
 __meta__ = {
-"_edit_use_anchors_": false
+"_edit_use_anchors_": true
 }
 
 [node name="Box" type="VBoxContainer" parent="."]
@@ -38,7 +38,7 @@ size_flags_vertical = 3
 custom_constants/separation = 2
 script = ExtResource( 1 )
 
-[node name="Models" parent="Box/Panels" instance=ExtResource( 2 )]
+[node name="Models" parent="Box/Panels" instance=ExtResource( 4 )]
 anchor_right = 0.0
 margin_right = 150.0
 margin_bottom = 562.0
@@ -67,7 +67,7 @@ margin_bottom = 562.0
 mouse_default_cursor_shape = 10
 custom_styles/separator = SubResource( 1 )
 
-[node name="Materials" parent="Box/Panels" instance=ExtResource( 4 )]
+[node name="Materials" parent="Box/Panels" instance=ExtResource( 2 )]
 anchor_right = 0.0
 margin_left = 316.0
 margin_right = 596.0

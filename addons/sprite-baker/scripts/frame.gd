@@ -183,5 +183,3 @@ func _on_MoveRight_pressed() -> void:
 	var index: int = get_position_in_parent()
 	emit_signal("frame_moved", index, index + 2, false)
 
-
-
