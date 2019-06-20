@@ -282,7 +282,9 @@ hide_root = true
 select_mode = 1
 script = ExtResource( 8 )
 
-[node name="Loader" type="Node" parent="Box/Panel/Content/ModelsBox" index="8"]
+[node name="Loader" type="Node" parent="Box/Panel/Content/ModelsBox" index="8" groups=[
+"3D2SS.ModelMaterials",
+]]
 script = ExtResource( 9 )
 
 [node name="MinBar" parent="." index="1"]
@@ -299,8 +301,8 @@ margin_bottom = 326.0
 [node name="DropRight" parent="." index="3"]
 margin_right = 254.0
 margin_bottom = 326.0
-[connection signal="files_updated" from="Box/Panel/Content/ModelsBox/PathBox/FolderPath" to="Box/Panel/Content/ModelsBox" method="_on_FolderPath_files_updated"]
 [connection signal="files_updated" from="Box/Panel/Content/ModelsBox/PathBox/FolderPath" to="Box/Panel/Content/ModelsBox/FoundModels/FileTree" method="_on_FolderPath_files_updated"]
+[connection signal="files_updated" from="Box/Panel/Content/ModelsBox/PathBox/FolderPath" to="Box/Panel/Content/ModelsBox" method="_on_FolderPath_files_updated"]
 [connection signal="pressed" from="Box/Panel/Content/ModelsBox/PathBox/SearchFolder" to="Box/Panel/Content/ModelsBox" method="_on_SearchFolder_pressed"]
 [connection signal="pressed" from="Box/Panel/Content/ModelsBox/LoadBox/Load" to="Box/Panel/Content/ModelsBox" method="_on_Load_pressed"]
 [connection signal="pressed" from="Box/Panel/Content/ModelsBox/LoadBox/LoadAll" to="Box/Panel/Content/ModelsBox" method="_on_LoadAll_pressed"]

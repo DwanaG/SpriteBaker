@@ -114,6 +114,8 @@ func play_animation(item: TreeItem) -> void:
 		var anim_name: String = item.get_metadata(Column.NAME)
 		for node in get_tree().get_nodes_in_group("3D2SS.ModelAnimation"):
 			node.play_animation(anim_name)
+			if node.name == "PreviewBox":
+				node.set_frame_rate(item.get_range(Column.FPS))
 		item.set_metadata(Column.PLAY, true)
 		item.set_button(Column.PLAY, 0, StopIcon)
 		item_playing = item
@@ -182,4 +184,6 @@ func _on_FPS_value_changed(value: float) -> void:
 
 
 func _on_item_activated() -> void:
-	play_animation(get_selected())
+	var item: TreeItem = get_selected()
+	if item != item_playing:
+		play_animation(item)

@@ -3,10 +3,7 @@
 [ext_resource path="res://addons/sprite-baker/scripts/scene_3d.gd" type="Script" id=1]
 [ext_resource path="res://addons/sprite-baker/resources/environment.tres" type="Environment" id=2]
 
-[node name="Scene3D" type="Spatial" groups=[
-"3D2SS.ModelAnimation",
-"3D2SS.Model",
-]]
+[node name="Scene3D" type="Spatial"]
 script = ExtResource( 1 )
 
 [node name="WorldEnvironment" type="WorldEnvironment" parent="."]

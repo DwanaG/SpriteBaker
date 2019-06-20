@@ -3,7 +3,8 @@ extends Node
 
 signal loading_finished
 
-const TIME_MAX = 150 # msec
+const TIME_MAX: int = 150 # msec
+const Tools: Script = preload("tools.gd")
 
 var total_count: int
 var current_count: int
@@ -14,6 +15,7 @@ var loaders: Array = []
 var current_loader: ResourceInteractiveLoader = null
 
 var progress_group: Array
+var meshes: Array
 
 
 func _exit_tree() -> void:
@@ -42,6 +44,7 @@ func _process(_delta: float) -> void:
 				elif resource is Mesh:
 					model = MeshInstance.new()
 					model.mesh = resource
+				model.set_meta("resource_path", resource.resource_path)
 				models_dict[resource.resource_path] = model
 				current_count += current_loader.get_stage_count()
 				current_loader = null
@@ -95,5 +98,14 @@ func clear() -> void:
 func select(id: int) -> void:
 	var file: String = files[id]
 	var model: Spatial = models_dict[file]
+	meshes = Tools.find_nodes_by_type("MeshInstance", model)
 	for node in get_tree().get_nodes_in_group("3D2SS.ModelData"):
 		node.update_model(model)
+
+
+func update_surface_material(surf_name: String, mat: Material) -> void:
+	for meshi in meshes:
+		var mesh: ArrayMesh = meshi.mesh
+		var index: int = mesh.surface_find_by_name(surf_name)
+		if index != -1:
+			(meshi as MeshInstance).set_surface_material(index, mat)

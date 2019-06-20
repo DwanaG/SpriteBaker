@@ -34,6 +34,7 @@ tick_style = ExtResource( 6 )
 time_ruler_path = NodePath("TimeRuler")
 slider_path = NodePath("Margin/Background/Slider")
 background_path = NodePath("Margin/Background")
+keys_ctrl_path = NodePath("Margin/Background/Slider/Keys")
 
 [node name="TimeRuler" type="HBoxContainer" parent="."]
 margin_right = 334.0
@@ -104,5 +105,14 @@ ticks_on_borders = true
 __meta__ = {
 "_edit_use_anchors_": false
 }
+
+[node name="Keys" type="Control" parent="Margin/Background/Slider"]
+anchor_right = 1.0
+anchor_bottom = 1.0
+mouse_filter = 1
+__meta__ = {
+"_edit_use_anchors_": false
+}
 [connection signal="draw" from="Margin/Background" to="." method="_on_Background_draw"]
 [connection signal="value_changed" from="Margin/Background/Slider" to="." method="_on_Slider_value_changed"]
+[connection signal="draw" from="Margin/Background/Slider/Keys" to="." method="_on_Keys_draw"]

@@ -10,10 +10,12 @@ export(StyleBox) var tick_style: StyleBox
 export(NodePath) var time_ruler_path: NodePath
 export(NodePath) var slider_path: NodePath
 export(NodePath) var background_path: NodePath
+export(NodePath) var keys_ctrl_path: NodePath
 
 onready var time_ruler: BoxContainer = get_node(time_ruler_path)
 onready var slider: Slider = get_node(slider_path)
 onready var background: Slider = get_node(background_path)
+onready var keys_ctrl: Control = get_node(keys_ctrl_path)
 
 var max_length: float = 0.0
 var anim_length: float = 0.0
@@ -21,6 +23,7 @@ var time: float = 0.0
 var playing: bool = false
 var paused: bool = false
 var looping: bool = false
+var keys: Array = []
 
 
 func _ready() -> void:
@@ -99,6 +102,7 @@ func stop_animation(back_to_rest: bool) -> void:
 		slider.editable = false
 		slider.value = 0.0
 		set_physics_process(false)
+	keys_ctrl.update()
 
 
 func reset_animation() -> void:
@@ -118,6 +122,15 @@ func resume_animation() -> void:
 
 func set_time(value: float) -> void:
 	slider.value = value
+
+
+func set_frame_rate(value: float) -> void:
+	var nframes: int = int(round(anim_length * value))
+	keys.resize(nframes)
+	for i in range(nframes):
+		keys[i] = i * anim_length / nframes
+	if not looping:
+		keys.append(anim_length)
 
 
 func get_timeline_length(anim_lenght: float) -> Array:
@@ -158,3 +171,6 @@ func _on_Slider_value_changed(value: float) -> void:
 		for node in get_tree().get_nodes_in_group("3D2SS.Model"):
 			node.anim_player.seek(time, true)
 
+
+func _on_Keys_draw() -> void:
+	pass # Replace with function body.

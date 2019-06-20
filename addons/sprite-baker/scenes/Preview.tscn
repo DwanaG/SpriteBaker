@@ -1,74 +1,79 @@
-[gd_scene load_steps=31 format=2]
+[gd_scene load_steps=33 format=2]
 
 [ext_resource path="res://addons/sprite-baker/scenes/Frame.tscn" type="PackedScene" id=1]
 [ext_resource path="res://addons/sprite-baker/scripts/preview.gd" type="Script" id=2]
-[ext_resource path="res://addons/sprite-baker/scenes/Scene3D.tscn" type="PackedScene" id=3]
-[ext_resource path="res://addons/sprite-baker/scripts/model_3d_view.gd" type="Script" id=4]
-[ext_resource path="res://addons/sprite-baker/scripts/sprite_view.gd" type="Script" id=5]
-[ext_resource path="res://addons/sprite-baker/scripts/bones_tree.gd" type="Script" id=6]
-[ext_resource path="res://addons/sprite-baker/icons/icon_clear.svg" type="Texture" id=7]
-[ext_resource path="res://addons/sprite-baker/scenes/Timeline.tscn" type="PackedScene" id=8]
-[ext_resource path="res://addons/sprite-baker/icons/stop.svg" type="Texture" id=9]
-[ext_resource path="res://addons/sprite-baker/icons/play.svg" type="Texture" id=10]
-[ext_resource path="res://addons/sprite-baker/icons/loop.svg" type="Texture" id=11]
-[ext_resource path="res://addons/sprite-baker/icons/top_view.svg" type="Texture" id=12]
-[ext_resource path="res://addons/sprite-baker/icons/left_view.svg" type="Texture" id=13]
-[ext_resource path="res://addons/sprite-baker/icons/rear_view.svg" type="Texture" id=14]
-[ext_resource path="res://addons/sprite-baker/icons/right_view.svg" type="Texture" id=15]
-[ext_resource path="res://addons/sprite-baker/icons/front_view.svg" type="Texture" id=16]
+[ext_resource path="res://addons/sprite-baker/icons/front_view.svg" type="Texture" id=3]
+[ext_resource path="res://addons/sprite-baker/icons/rear_view.svg" type="Texture" id=4]
+[ext_resource path="res://addons/sprite-baker/icons/left_view.svg" type="Texture" id=5]
+[ext_resource path="res://addons/sprite-baker/icons/right_view.svg" type="Texture" id=6]
+[ext_resource path="res://addons/sprite-baker/icons/top_view.svg" type="Texture" id=7]
+[ext_resource path="res://addons/sprite-baker/scripts/model_3d_view.gd" type="Script" id=8]
+[ext_resource path="res://addons/sprite-baker/scenes/Scene3D.tscn" type="PackedScene" id=9]
+[ext_resource path="res://addons/sprite-baker/scripts/sprite_view.gd" type="Script" id=10]
+[ext_resource path="res://addons/sprite-baker/icons/play.svg" type="Texture" id=11]
+[ext_resource path="res://addons/sprite-baker/icons/stop.svg" type="Texture" id=12]
+[ext_resource path="res://addons/sprite-baker/scenes/Timeline.tscn" type="PackedScene" id=13]
+[ext_resource path="res://addons/sprite-baker/icons/loop.svg" type="Texture" id=14]
+[ext_resource path="res://addons/sprite-baker/scripts/bones_tree.gd" type="Script" id=15]
+[ext_resource path="res://addons/sprite-baker/icons/icon_clear.svg" type="Texture" id=16]
 
-[sub_resource type="ButtonGroup" id=4]
+[sub_resource type="ButtonGroup" id=1]
 resource_name = "ViewGroup"
 
-[sub_resource type="InputEventKey" id=5]
+[sub_resource type="InputEventKey" id=2]
 scancode = 16777351
 
-[sub_resource type="ShortCut" id=6]
-shortcut = SubResource( 5 )
+[sub_resource type="ShortCut" id=3]
+shortcut = SubResource( 2 )
 
-[sub_resource type="InputEventKey" id=7]
+[sub_resource type="InputEventKey" id=4]
 control = true
 command = true
 scancode = 16777351
 
-[sub_resource type="ShortCut" id=8]
-shortcut = SubResource( 7 )
+[sub_resource type="ShortCut" id=5]
+shortcut = SubResource( 4 )
 
-[sub_resource type="InputEventKey" id=9]
+[sub_resource type="InputEventKey" id=6]
 scancode = 16777353
 
-[sub_resource type="ShortCut" id=10]
-shortcut = SubResource( 9 )
+[sub_resource type="ShortCut" id=7]
+shortcut = SubResource( 6 )
 
-[sub_resource type="InputEventKey" id=11]
+[sub_resource type="InputEventKey" id=8]
 control = true
 command = true
 scancode = 16777353
 
-[sub_resource type="ShortCut" id=12]
-shortcut = SubResource( 11 )
+[sub_resource type="ShortCut" id=9]
+shortcut = SubResource( 8 )
 
-[sub_resource type="InputEventKey" id=13]
+[sub_resource type="InputEventKey" id=10]
 scancode = 16777357
 
-[sub_resource type="ShortCut" id=14]
-shortcut = SubResource( 13 )
+[sub_resource type="ShortCut" id=11]
+shortcut = SubResource( 10 )
 
-[sub_resource type="StyleBoxEmpty" id=1]
+[sub_resource type="World" id=12]
 
-[sub_resource type="StyleBoxEmpty" id=2]
+[sub_resource type="StyleBoxEmpty" id=13]
 
-[sub_resource type="StyleBoxEmpty" id=3]
+[sub_resource type="World" id=14]
 
-[node name="Preview" instance=ExtResource( 1 )]
+[sub_resource type="StyleBoxEmpty" id=15]
+
+[sub_resource type="StyleBoxEmpty" id=16]
+
+[node name="Preview" index="0" instance=ExtResource( 1 )]
 anchor_right = 0.0869141
+anchor_bottom = 0.0366667
 margin_right = 287.0
 margin_bottom = 569.0
 title = "Preview"
 
 [node name="Box" parent="." index="0"]
 margin_right = 374.0
-margin_bottom = 567.0
+margin_bottom = 589.0
 
 [node name="TitleBar" parent="Box" index="0"]
 margin_right = 372.0
@@ -95,11 +100,11 @@ margin_right = 372.0
 
 [node name="Panel" parent="Box" index="1"]
 margin_right = 372.0
-margin_bottom = 565.0
+margin_bottom = 587.0
 
 [node name="Content" parent="Box/Panel" index="0"]
 margin_right = 367.0
-margin_bottom = 530.0
+margin_bottom = 552.0
 
 [node name="PreviewBox" type="VSplitContainer" parent="Box/Panel/Content" index="0" groups=[
 "3D2SS.ModelData",
@@ -107,16 +112,18 @@ margin_bottom = 530.0
 "3D2SS.ModelViewport",
 ]]
 margin_right = 362.0
-margin_bottom = 525.0
+margin_bottom = 547.0
 rect_min_size = Vector2( 1, 0 )
 size_flags_horizontal = 3
 size_flags_vertical = 3
-split_offset = 200
+split_offset = 150
 script = ExtResource( 2 )
 pixel_density_path = NodePath("OptionsScroll/OptionsGrid/PixelDensity")
+margin_path = NodePath("OptionsScroll/OptionsGrid/Margin")
 root_motion_dialog_path = NodePath("OptionsScroll/OptionsGrid/RootMotionBox/RootMotion/RootMotionDialog")
 root_motion_clear_path = NodePath("OptionsScroll/OptionsGrid/RootMotionBox/RootMotionClear")
 root_motion_path = NodePath("OptionsScroll/OptionsGrid/RootMotionBox/RootMotion")
+bones_tree_path = NodePath("OptionsScroll/OptionsGrid/RootMotionBox/RootMotion/RootMotionDialog/Scroll/BonesTree")
 timeline_path = NodePath("Box/ControlsBox/Timeline")
 play_path = NodePath("Box/ControlsBox/PlayBox/Play")
 stop_path = NodePath("Box/ControlsBox/PlayBox/Stop")
@@ -125,79 +132,89 @@ loop_path = NodePath("Box/ControlsBox/Box/Loop")
 front_view_path = NodePath("Box/ViewBox/OrthogonalBox/OrthogonalGroup/Front")
 rx_spin_path = NodePath("Box/ControlsBox/RotationBox/RxBox/Rx")
 ry_spin_path = NodePath("Box/ControlsBox/RotationBox/RyBox/Ry")
-view_buttons_group = SubResource( 4 )
+bake_button_path = NodePath("Box/ViewBox/BakeAnim")
+view_buttons_group = SubResource( 1 )
 
 [node name="Box" type="VBoxContainer" parent="Box/Panel/Content/PreviewBox" index="0"]
 margin_right = 362.0
-margin_bottom = 470.0
+margin_bottom = 420.0
 
 [node name="ViewBox" type="HBoxContainer" parent="Box/Panel/Content/PreviewBox/Box" index="0"]
 margin_right = 362.0
 margin_bottom = 44.0
 
-[node name="OrthogonalBox" type="VBoxContainer" parent="Box/Panel/Content/PreviewBox/Box/ViewBox" index="0"]
+[node name="BakeAnim" type="Button" parent="Box/Panel/Content/PreviewBox/Box/ViewBox" index="0"]
+margin_top = 12.0
+margin_right = 113.0
+margin_bottom = 32.0
+size_flags_vertical = 4
+disabled = true
+text = "Bake Animation"
+
+[node name="OrthogonalBox" type="VBoxContainer" parent="Box/Panel/Content/PreviewBox/Box/ViewBox" index="1"]
+margin_left = 117.0
 margin_right = 362.0
 margin_bottom = 44.0
 size_flags_horizontal = 3
 
 [node name="OrthogonalLabel" type="Label" parent="Box/Panel/Content/PreviewBox/Box/ViewBox/OrthogonalBox" index="0"]
-margin_right = 362.0
+margin_right = 245.0
 margin_bottom = 14.0
 text = "Orthogonal View"
 
 [node name="OrthogonalGroup" type="HBoxContainer" parent="Box/Panel/Content/PreviewBox/Box/ViewBox/OrthogonalBox" index="1"]
 margin_top = 18.0
-margin_right = 362.0
+margin_right = 245.0
 margin_bottom = 44.0
 
 [node name="Front" type="Button" parent="Box/Panel/Content/PreviewBox/Box/ViewBox/OrthogonalBox/OrthogonalGroup" index="0"]
 margin_right = 32.0
 margin_bottom = 26.0
 toggle_mode = true
-shortcut = SubResource( 6 )
-group = SubResource( 4 )
-icon = ExtResource( 16 )
+shortcut = SubResource( 3 )
+group = SubResource( 1 )
+icon = ExtResource( 3 )
 
 [node name="Rear" type="Button" parent="Box/Panel/Content/PreviewBox/Box/ViewBox/OrthogonalBox/OrthogonalGroup" index="1"]
 margin_left = 36.0
 margin_right = 68.0
 margin_bottom = 26.0
 toggle_mode = true
-shortcut = SubResource( 8 )
-group = SubResource( 4 )
-icon = ExtResource( 14 )
+shortcut = SubResource( 5 )
+group = SubResource( 1 )
+icon = ExtResource( 4 )
 
 [node name="Left" type="Button" parent="Box/Panel/Content/PreviewBox/Box/ViewBox/OrthogonalBox/OrthogonalGroup" index="2"]
 margin_left = 72.0
 margin_right = 104.0
 margin_bottom = 26.0
 toggle_mode = true
-shortcut = SubResource( 10 )
-group = SubResource( 4 )
-icon = ExtResource( 13 )
+shortcut = SubResource( 7 )
+group = SubResource( 1 )
+icon = ExtResource( 5 )
 
 [node name="Right" type="Button" parent="Box/Panel/Content/PreviewBox/Box/ViewBox/OrthogonalBox/OrthogonalGroup" index="3"]
 margin_left = 108.0
 margin_right = 140.0
 margin_bottom = 26.0
 toggle_mode = true
-shortcut = SubResource( 12 )
-group = SubResource( 4 )
-icon = ExtResource( 15 )
+shortcut = SubResource( 9 )
+group = SubResource( 1 )
+icon = ExtResource( 6 )
 
 [node name="Top" type="Button" parent="Box/Panel/Content/PreviewBox/Box/ViewBox/OrthogonalBox/OrthogonalGroup" index="4"]
 margin_left = 144.0
 margin_right = 176.0
 margin_bottom = 26.0
 toggle_mode = true
-shortcut = SubResource( 14 )
-group = SubResource( 4 )
-icon = ExtResource( 12 )
+shortcut = SubResource( 11 )
+group = SubResource( 1 )
+icon = ExtResource( 7 )
 
 [node name="TabContainer" type="TabContainer" parent="Box/Panel/Content/PreviewBox/Box" index="1"]
 margin_top = 48.0
 margin_right = 362.0
-margin_bottom = 398.0
+margin_bottom = 348.0
 rect_min_size = Vector2( 150, 150 )
 size_flags_vertical = 3
 tab_align = 0
@@ -213,16 +230,21 @@ margin_top = 32.0
 margin_right = -4.0
 margin_bottom = -4.0
 stretch = true
-script = ExtResource( 4 )
+script = ExtResource( 8 )
 
 [node name="Viewport3D" type="Viewport" parent="Box/Panel/Content/PreviewBox/Box/TabContainer/3D View" index="0"]
-size = Vector2( 354, 314 )
+size = Vector2( 354, 264 )
 own_world = true
+world = SubResource( 12 )
 transparent_bg = true
 handle_input_locally = false
 render_target_update_mode = 3
 
-[node name="Scene3D" parent="Box/Panel/Content/PreviewBox/Box/TabContainer/3D View/Viewport3D" index="0" instance=ExtResource( 3 )]
+[node name="Scene3D" parent="Box/Panel/Content/PreviewBox/Box/TabContainer/3D View/Viewport3D" index="0" groups=[
+"3D2SS.ModelMaterials",
+"3D2SS.ModelAnimation",
+"3D2SS.Model",
+] instance=ExtResource( 9 )]
 
 [node name="Sprite" type="Panel" parent="Box/Panel/Content/PreviewBox/Box/TabContainer" index="1"]
 visible = false
@@ -232,7 +254,7 @@ margin_left = 4.0
 margin_top = 32.0
 margin_right = -4.0
 margin_bottom = -4.0
-custom_styles/panel = SubResource( 1 )
+custom_styles/panel = SubResource( 13 )
 
 [node name="SpriteView" type="ViewportContainer" parent="Box/Panel/Content/PreviewBox/Box/TabContainer/Sprite" index="0" groups=[
 "3D2SS.ModelData",
@@ -251,7 +273,7 @@ grow_vertical = 2
 rect_scale = Vector2( 4.48571, 4.48571 )
 rect_pivot_offset = Vector2( 39, 35 )
 stretch = true
-script = ExtResource( 5 )
+script = ExtResource( 10 )
 __meta__ = {
 "_edit_use_anchors_": false
 }
@@ -259,16 +281,21 @@ __meta__ = {
 [node name="Viewport3D" type="Viewport" parent="Box/Panel/Content/PreviewBox/Box/TabContainer/Sprite/SpriteView" index="0"]
 size = Vector2( 78, 70 )
 own_world = true
+world = SubResource( 14 )
 transparent_bg = true
 handle_input_locally = false
 render_target_update_mode = 0
 
-[node name="Scene3D" parent="Box/Panel/Content/PreviewBox/Box/TabContainer/Sprite/SpriteView/Viewport3D" index="0" instance=ExtResource( 3 )]
+[node name="Scene3D" parent="Box/Panel/Content/PreviewBox/Box/TabContainer/Sprite/SpriteView/Viewport3D" index="0" groups=[
+"3D2SS.ModelMaterials",
+"3D2SS.ModelAnimation",
+"3D2SS.Model",
+] instance=ExtResource( 9 )]
 
 [node name="ControlsBox" type="HBoxContainer" parent="Box/Panel/Content/PreviewBox/Box" index="2"]
-margin_top = 402.0
+margin_top = 352.0
 margin_right = 362.0
-margin_bottom = 456.0
+margin_bottom = 406.0
 custom_constants/separation = 10
 
 [node name="PlayBox" type="VBoxContainer" parent="Box/Panel/Content/PreviewBox/Box/ControlsBox" index="0"]
@@ -282,16 +309,16 @@ margin_top = 6.0
 margin_right = 28.0
 margin_bottom = 28.0
 disabled = true
-icon = ExtResource( 10 )
+icon = ExtResource( 11 )
 
 [node name="Stop" type="Button" parent="Box/Panel/Content/PreviewBox/Box/ControlsBox/PlayBox" index="1"]
 margin_top = 32.0
 margin_right = 28.0
 margin_bottom = 54.0
 disabled = true
-icon = ExtResource( 9 )
+icon = ExtResource( 12 )
 
-[node name="Timeline" parent="Box/Panel/Content/PreviewBox/Box/ControlsBox" index="1" instance=ExtResource( 8 )]
+[node name="Timeline" parent="Box/Panel/Content/PreviewBox/Box/ControlsBox" index="1" instance=ExtResource( 13 )]
 margin_left = 38.0
 margin_right = 159.0
 margin_bottom = 54.0
@@ -311,7 +338,7 @@ margin_bottom = 26.0
 size_flags_horizontal = 4
 disabled = true
 toggle_mode = true
-icon = ExtResource( 11 )
+icon = ExtResource( 14 )
 
 [node name="Time" type="SpinBox" parent="Box/Panel/Content/PreviewBox/Box/ControlsBox/Box" index="1"]
 margin_top = 30.0
@@ -369,21 +396,21 @@ step = 0.1
 suffix = "deg"
 
 [node name="Separator" type="HSeparator" parent="Box/Panel/Content/PreviewBox/Box" index="3"]
-margin_top = 460.0
+margin_top = 410.0
 margin_right = 362.0
-margin_bottom = 470.0
-custom_styles/separator = SubResource( 2 )
+margin_bottom = 420.0
+custom_styles/separator = SubResource( 15 )
 custom_constants/separation = 10
 
 [node name="OptionsScroll" type="ScrollContainer" parent="Box/Panel/Content/PreviewBox" index="1"]
-margin_top = 482.0
+margin_top = 432.0
 margin_right = 362.0
-margin_bottom = 525.0
+margin_bottom = 547.0
 size_flags_vertical = 3
 
 [node name="OptionsGrid" type="GridContainer" parent="Box/Panel/Content/PreviewBox/OptionsScroll" index="0"]
 margin_right = 401.0
-margin_bottom = 50.0
+margin_bottom = 103.0
 size_flags_horizontal = 3
 size_flags_vertical = 3
 columns = 5
@@ -408,7 +435,7 @@ allow_greater = true
 margin_left = 251.0
 margin_right = 276.0
 margin_bottom = 24.0
-custom_styles/separator = SubResource( 3 )
+custom_styles/separator = SubResource( 16 )
 custom_constants/separation = 25
 
 [node name="MarginLabel" type="Label" parent="Box/Panel/Content/PreviewBox/OptionsScroll/OptionsGrid" index="3"]
@@ -481,7 +508,7 @@ size_flags_horizontal = 3
 size_flags_vertical = 3
 custom_constants/draw_relationship_lines = 1
 select_mode = 1
-script = ExtResource( 6 )
+script = ExtResource( 15 )
 root_motion_button_path = NodePath("../../..")
 
 [node name="RootMotionClear" type="Button" parent="Box/Panel/Content/PreviewBox/OptionsScroll/OptionsGrid/RootMotionBox" index="1"]
@@ -489,7 +516,7 @@ margin_left = 100.0
 margin_right = 128.0
 margin_bottom = 22.0
 disabled = true
-icon = ExtResource( 7 )
+icon = ExtResource( 16 )
 clip_text = true
 
 [node name="Separator2" type="VSeparator" parent="Box/Panel/Content/PreviewBox/OptionsScroll/OptionsGrid" index="7"]
@@ -497,23 +524,24 @@ margin_left = 251.0
 margin_top = 28.0
 margin_right = 276.0
 margin_bottom = 50.0
-custom_styles/separator = SubResource( 3 )
+custom_styles/separator = SubResource( 16 )
 custom_constants/separation = 25
 
 [node name="MinBar" parent="." index="1"]
 margin_right = 374.0
-margin_bottom = 567.0
+margin_bottom = 589.0
 
 [node name="Title" parent="MinBar/TitleBox/Panel" index="0"]
 text = "Preview"
 
 [node name="DropLeft" parent="." index="2"]
 margin_right = 374.0
-margin_bottom = 567.0
+margin_bottom = 589.0
 
 [node name="DropRight" parent="." index="3"]
 margin_right = 374.0
-margin_bottom = 567.0
+margin_bottom = 589.0
+[connection signal="pressed" from="Box/Panel/Content/PreviewBox/Box/ViewBox/BakeAnim" to="Box/Panel/Content/PreviewBox" method="_on_BakeAnim_pressed"]
 [connection signal="pressed" from="Box/Panel/Content/PreviewBox/Box/ViewBox/OrthogonalBox/OrthogonalGroup/Front" to="Box/Panel/Content/PreviewBox" method="_on_view_pressed"]
 [connection signal="pressed" from="Box/Panel/Content/PreviewBox/Box/ViewBox/OrthogonalBox/OrthogonalGroup/Rear" to="Box/Panel/Content/PreviewBox" method="_on_view_pressed"]
 [connection signal="pressed" from="Box/Panel/Content/PreviewBox/Box/ViewBox/OrthogonalBox/OrthogonalGroup/Left" to="Box/Panel/Content/PreviewBox" method="_on_view_pressed"]

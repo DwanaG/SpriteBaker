@@ -5,13 +5,21 @@ const Tools: Script = preload("tools.gd")
 
 const PlayIcon: Texture = preload("res://addons/sprite-baker/icons/play.svg")
 const PauseIcon: Texture = preload("res://addons/sprite-baker/icons/pause.svg")
-const LoopIcon: Texture = preload("res://addons/sprite-baker/icons/loop.svg")
-const LoopActiveIcon: Texture = preload("res://addons/sprite-baker/icons/loop_active.svg")
+
+const ROTATIONS: Dictionary = {
+	"Front": Vector2(0.0, 0.0),
+	"Rear": Vector2(PI, 0.0),
+	"Left": Vector2(-0.5 * PI, 0.0),
+	"Right": Vector2(0.5 * PI, 0.0),
+	"Top": Vector2(PI, -PI * 0.5),
+}
 
 export(NodePath) var pixel_density_path: NodePath
+export(NodePath) var margin_path: NodePath
 export(NodePath) var root_motion_dialog_path: NodePath
 export(NodePath) var root_motion_clear_path: NodePath
 export(NodePath) var root_motion_path: NodePath
+export(NodePath) var bones_tree_path: NodePath
 export(NodePath) var timeline_path: NodePath
 export(NodePath) var play_path: NodePath
 export(NodePath) var stop_path: NodePath
@@ -20,10 +28,14 @@ export(NodePath) var loop_path: NodePath
 export(NodePath) var front_view_path: NodePath
 export(NodePath) var rx_spin_path: NodePath
 export(NodePath) var ry_spin_path: NodePath
+export(NodePath) var bake_button_path: NodePath
 export(ButtonGroup) var view_buttons_group: ButtonGroup
 
+onready var pixel_density: SpinBox = get_node(pixel_density_path)
+onready var margin: SpinBox = get_node(margin_path)
 onready var root_motion_clear: Button = get_node(root_motion_clear_path)
 onready var root_motion: Button = get_node(root_motion_path)
+onready var bones_tree: Tree = get_node(bones_tree_path)
 onready var timeline: Container = get_node(timeline_path)
 onready var play: Button = get_node(play_path)
 onready var stop: Button = get_node(stop_path)
@@ -31,13 +43,16 @@ onready var time_spin: SpinBox = get_node(time_spin_path)
 onready var loop: Button = get_node(loop_path)
 onready var rx_spin: SpinBox = get_node(rx_spin_path)
 onready var ry_spin: SpinBox = get_node(ry_spin_path)
+onready var bake_button: Button = get_node(bake_button_path)
 
 var anim_player: AnimationPlayer
 var current_animation: String = ""
 var pressed_view_button: Button
+var model: Spatial
 
 
-func update_model(model: Spatial) -> void:
+func update_model(model_: Spatial) -> void:
+	model = model_
 	anim_player = Tools.find_single_node_by_type("AnimationPlayer", model)
 	pressed_view_button = get_node(front_view_path)
 	pressed_view_button.pressed = true
@@ -70,12 +85,8 @@ func play_animation(anim_name: String) -> void:
 	time_spin.value = 0.0
 	time_spin.max_value = timeline.anim_length
 	loop.disabled = false
-	if anim.loop:
-		loop.icon = LoopActiveIcon
-		loop.pressed = true
-	else:
-		loop.icon = LoopIcon
-		loop.pressed = false
+	loop.pressed = anim.loop
+	bake_button.disabled = false
 
 
 func stop_animation(back_to_rest: bool) -> void:
@@ -89,7 +100,7 @@ func stop_animation(back_to_rest: bool) -> void:
 		time_spin.value = 0.0
 		loop.pressed = false
 		loop.disabled = true
-		loop.icon = LoopIcon
+	bake_button.disabled = true
 
 
 func reset_animation() -> void:
@@ -101,12 +112,7 @@ func set_animation_loop(anim_name: String, value: bool) -> void:
 	anim_player.get_animation(anim_name).loop = value
 	if anim_name == current_animation:
 		timeline.looping = value
-		if value:
-			loop.icon = LoopActiveIcon
-			loop.pressed = true
-		else:
-			loop.icon = LoopIcon
-			loop.pressed = false
+		loop.pressed = value
 
 
 func rotate_model(rx: float, ry: float) -> void:
@@ -120,8 +126,12 @@ func deselect_views() -> void:
 		button.pressed = false
 
 
+func set_frame_rate(fps: float) -> void:
+	timeline.set_frame_rate(fps)
+
+
 func _on_SpriteView_pixel_density_changed(value: float) -> void:
-	get_node(pixel_density_path).value = value
+	pixel_density.value = value
 
 
 func _on_RootMotion_pressed() -> void:
@@ -188,31 +198,14 @@ func _on_view_pressed() -> void:
 	if not button:
 		pressed_view_button.pressed = true
 		return
-	var view: String = button.name
-	var rotx: float
-	var roty: float
-	match view:
-		"Front":
-			rotx = 0.0
-			roty = 0.0
-		"Rear":
-			rotx = PI
-			roty = 0.0
-		"Left":
-			rotx = -PI * 0.5
-			roty = 0.0
-		"Right":
-			rotx = PI * 0.5
-			roty = 0.0
-		"Top":
-			rotx = PI
-			roty = -PI * 0.5
+	var rot: Vector2 = ROTATIONS[button.name]
 	for node in get_tree().get_nodes_in_group("3D2SS.ModelViewport"):
 		if node == self:
-			rx_spin.value = rad2deg(rotx)
-			ry_spin.value = rad2deg(roty)
+			rx_spin.value = rad2deg(rot.x)
+			ry_spin.value = rad2deg(rot.y)
 			continue
-		node.rotate_model(rotx, roty)
+		node.rotate_model(rot.x, rot.y)
+	button.pressed = true
 	pressed_view_button = button
 
 
@@ -224,3 +217,21 @@ func _on_rot_value_changed(_value: float) -> void:
 		if node == self:
 			continue
 		node.rotate_model(rotx, roty)
+
+
+func _on_BakeAnim_pressed() -> void:
+	var bake: Node
+	for node in get_tree().get_nodes_in_group("3D2SS.Bake"):
+		if node.name == "Bake":
+			bake = node
+			break
+	var scene: Spatial = bake.scene_3d
+	scene.set_model(model.duplicate())
+	scene.set_animation_loop(current_animation, loop.pressed)
+	var rotx: float = deg2rad(rx_spin.value)
+	var roty: float = deg2rad(ry_spin.value)
+	scene.rotate_model(rotx, roty)
+	if bones_tree.get_selected():
+		var data: Array = bones_tree.get_selected().get_metadata(0)
+		scene.set_root_motion_track(data[0], data[1])
+	bake.bake_animation(current_animation, pixel_density.value, margin.value, timeline.keys)

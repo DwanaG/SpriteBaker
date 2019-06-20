@@ -12,7 +12,6 @@
 [ext_resource path="res://addons/sprite-baker/icons/clear_disabled.svg" type="Texture" id=10]
 [ext_resource path="res://addons/sprite-baker/icons/clear_hover.svg" type="Texture" id=11]
 
-
 [sub_resource type="StyleBoxFlat" id=1]
 content_margin_left = 5.0
 content_margin_right = 5.0
@@ -93,8 +92,8 @@ size_flags_vertical = 6
 clip_text = true
 
 [node name="MaterialName" type="Button" parent="Box/Name" groups=[
-"3D2SS.MaterialProps.PlainColor",
 "3D2SS.MaterialProps.Hide",
+"3D2SS.MaterialProps.PlainColor",
 ]]
 margin_top = 45.0
 margin_right = 183.0
@@ -152,8 +151,8 @@ size_flags_vertical = 4
 color = Color( 1, 1, 1, 1 )
 
 [node name="AlbedoTexture" type="Button" parent="Box" groups=[
-"3D2SS.MaterialProps.PlainColor",
 "3D2SS.MaterialProps.Hide",
+"3D2SS.MaterialProps.PlainColor",
 ]]
 margin_left = 274.0
 margin_top = 11.0
@@ -201,8 +200,8 @@ custom_styles/separator = SubResource( 2 )
 custom_constants/separation = 15
 
 [node name="Roughness" type="Button" parent="Box" groups=[
-"3D2SS.MaterialProps.PlainColor",
 "3D2SS.MaterialProps.Hide",
+"3D2SS.MaterialProps.PlainColor",
 ]]
 margin_left = 348.0
 margin_top = 11.0
@@ -378,8 +377,8 @@ custom_styles/separator = SubResource( 2 )
 custom_constants/separation = 15
 
 [node name="Metallic" type="Button" parent="Box" groups=[
-"3D2SS.MaterialProps.PlainColor",
 "3D2SS.MaterialProps.Hide",
+"3D2SS.MaterialProps.PlainColor",
 ]]
 margin_left = 422.0
 margin_top = 11.0
@@ -570,8 +569,8 @@ custom_styles/separator = SubResource( 2 )
 custom_constants/separation = 15
 
 [node name="Normal" type="Button" parent="Box" groups=[
-"3D2SS.MaterialProps.PlainColor",
 "3D2SS.MaterialProps.Hide",
+"3D2SS.MaterialProps.PlainColor",
 ]]
 margin_left = 496.0
 margin_top = 11.0

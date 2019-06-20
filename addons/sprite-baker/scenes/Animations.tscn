@@ -1,32 +1,67 @@
-[gd_scene load_steps=3 format=2]
+[gd_scene load_steps=5 format=2]
 
 [ext_resource path="res://addons/sprite-baker/scenes/Frame.tscn" type="PackedScene" id=1]
 [ext_resource path="res://addons/sprite-baker/scripts/animations_tree.gd" type="Script" id=2]
+[ext_resource path="res://addons/sprite-baker/scripts/animations.gd" type="Script" id=3]
 
-[node name="Animations" index="0" instance=ExtResource( 1 )]
+[sub_resource type="StyleBoxEmpty" id=1]
+
+[node name="Animations" instance=ExtResource( 1 )]
+anchor_right = 0.147461
 title = "Animations"
 title_path = NodePath("../Animations/Box/TitleBar/TitleBox/Title")
 
+[node name="Box" parent="." index="0"]
+margin_right = 343.0
+
+[node name="TitleBar" parent="Box" index="0"]
+margin_right = 341.0
+
 [node name="Title" parent="Box/TitleBar/TitleBox" index="0"]
+margin_right = 272.0
 text = "Animations"
 
+[node name="MoveLeft" parent="Box/TitleBar/TitleBox" index="1"]
+margin_left = 276.0
+margin_right = 292.0
+
+[node name="MoveRight" parent="Box/TitleBar/TitleBox" index="2"]
+margin_left = 296.0
+margin_right = 312.0
+
+[node name="Minimize" parent="Box/TitleBar/TitleBox" index="3"]
+margin_left = 316.0
+margin_right = 332.0
+
+[node name="Margin" parent="Box/TitleBar/TitleBox" index="4"]
+margin_left = 336.0
+margin_right = 341.0
+
+[node name="Panel" parent="Box" index="1"]
+margin_right = 341.0
+
+[node name="Content" parent="Box/Panel" index="0"]
+margin_right = 336.0
+
 [node name="AnimationsBox" type="VBoxContainer" parent="Box/Panel/Content" index="0"]
-margin_right = 187.0
+margin_right = 331.0
 margin_bottom = 132.0
 size_flags_horizontal = 3
 size_flags_vertical = 3
+script = ExtResource( 3 )
+orientation_path = NodePath("OptionsBox/Orientation")
 
-[node name="FPSBox" type="HBoxContainer" parent="Box/Panel/Content/AnimationsBox" index="0"]
-margin_right = 187.0
+[node name="OptionsBox" type="HBoxContainer" parent="Box/Panel/Content/AnimationsBox" index="0"]
+margin_right = 331.0
 margin_bottom = 24.0
 
-[node name="FPSLabel" type="Label" parent="Box/Panel/Content/AnimationsBox/FPSBox" index="0"]
+[node name="FPSLabel" type="Label" parent="Box/Panel/Content/AnimationsBox/OptionsBox" index="0"]
 margin_top = 5.0
 margin_right = 22.0
 margin_bottom = 19.0
 text = "Fps"
 
-[node name="FPS" type="SpinBox" parent="Box/Panel/Content/AnimationsBox/FPSBox" index="1"]
+[node name="FPS" type="SpinBox" parent="Box/Panel/Content/AnimationsBox/OptionsBox" index="1"]
 margin_left = 26.0
 margin_right = 100.0
 margin_bottom = 24.0
@@ -34,22 +69,43 @@ min_value = 1.0
 max_value = 60.0
 value = 15.0
 
+[node name="Separator" type="VSeparator" parent="Box/Panel/Content/AnimationsBox/OptionsBox" index="2"]
+margin_left = 104.0
+margin_right = 108.0
+margin_bottom = 24.0
+custom_styles/separator = SubResource( 1 )
+
+[node name="Orientation" type="MenuButton" parent="Box/Panel/Content/AnimationsBox/OptionsBox" index="3"]
+margin_left = 112.0
+margin_right = 197.0
+margin_bottom = 24.0
+text = "Orientation"
+items = [ "Front view", null, 1, true, false, 0, 0, null, "", false, "Rear view", null, 1, false, false, 1, 0, null, "", false, "Left view", null, 1, false, false, 2, 0, null, "", false, "Right view", null, 1, false, false, 3, 0, null, "", false, "Top view", null, 1, false, false, 4, 0, null, "", false ]
+
 [node name="AnimationsTree" type="Tree" parent="Box/Panel/Content/AnimationsBox" index="1" groups=[
 "3D2SS.ModelData",
 ]]
 margin_top = 28.0
-margin_right = 187.0
+margin_right = 331.0
 margin_bottom = 132.0
 size_flags_vertical = 3
 columns = 8
-allow_reselect = true
 hide_root = true
 select_mode = 1
 script = ExtResource( 2 )
 
+[node name="MinBar" parent="." index="1"]
+margin_right = 343.0
+
 [node name="Title" parent="MinBar/TitleBox/Panel" index="0"]
 text = "Animations"
-[connection signal="value_changed" from="Box/Panel/Content/AnimationsBox/FPSBox/FPS" to="Box/Panel/Content/AnimationsBox/AnimationsTree" method="_on_FPS_value_changed"]
+
+[node name="DropLeft" parent="." index="2"]
+margin_right = 343.0
+
+[node name="DropRight" parent="." index="3"]
+margin_right = 343.0
+[connection signal="value_changed" from="Box/Panel/Content/AnimationsBox/OptionsBox/FPS" to="Box/Panel/Content/AnimationsBox/AnimationsTree" method="_on_FPS_value_changed"]
 [connection signal="button_pressed" from="Box/Panel/Content/AnimationsBox/AnimationsTree" to="Box/Panel/Content/AnimationsBox/AnimationsTree" method="_on_button_pressed"]
 [connection signal="item_activated" from="Box/Panel/Content/AnimationsBox/AnimationsTree" to="Box/Panel/Content/AnimationsBox/AnimationsTree" method="_on_item_activated"]
 [connection signal="item_edited" from="Box/Panel/Content/AnimationsBox/AnimationsTree" to="Box/Panel/Content/AnimationsBox/AnimationsTree" method="_on_item_edited"]

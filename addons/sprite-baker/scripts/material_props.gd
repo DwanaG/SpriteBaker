@@ -99,7 +99,7 @@ func set_plain_color(color: Color) -> void:
 
 
 func update_material(mat: SpatialMaterial) -> void:
-	for node in get_tree().get_nodes_in_group("3D2SS.Model"):
+	for node in get_tree().get_nodes_in_group("3D2SS.ModelMaterials"):
 		node.update_surface_material(surf_name, mat)
 
 	# Albedo
