@@ -291,3 +291,29 @@ func _on_RootMotionDialog_confirmed() -> void:
 
 func _on_SpriteView_pixel_density_changed(value: float) -> void:
 	pixel_density.value = value
+
+
+func _on_Bake_pressed() -> void:
+	var anim_data: Dictionary = {
+		anim_name: get_frame_keys()
+	}
+	var button: Button = view_buttons_group.get_pressed_button()
+	var views: Array = [[button.name, ROTATIONS[button.name]]] if button else [["custom-view", Vector2(deg2rad(rx_spin.value), deg2rad(ry_spin.value))]]
+	var data: Dictionary
+	for node in get_tree().get_nodes_in_group("SpriteBaker.BakeOptions"):
+		data = node.bake_options_data()
+	data["animations"] = anim_data
+	data["views"] = views
+	for node in get_tree().get_nodes_in_group("SpriteBaker.Bake"):
+		node.bake(data)
+
+
+func get_frame_keys() -> Array:
+	var keys: Array = []
+	var anim: Animation = anim_player.get_animation(anim_name)
+	var nframes: int = int(round(anim.length * fps))
+	for i in range(nframes):
+		keys.append(i * anim.length / float(nframes))
+	if not anim.loop:
+		keys.append(anim.length)
+	return keys

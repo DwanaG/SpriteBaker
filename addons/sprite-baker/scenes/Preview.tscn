@@ -481,6 +481,7 @@ margin_bottom = 50.0
 mouse_filter = 2
 custom_styles/separator = ExtResource( 1 )
 custom_constants/separation = 25
+[connection signal="pressed" from="Box/ViewBox/Bake" to="." method="_on_Bake_pressed"]
 [connection signal="pressed" from="Box/ViewBox/OrthogonalBox/OrthogonalGroup/Front" to="." method="_on_view_pressed"]
 [connection signal="pressed" from="Box/ViewBox/OrthogonalBox/OrthogonalGroup/Rear" to="." method="_on_view_pressed"]
 [connection signal="pressed" from="Box/ViewBox/OrthogonalBox/OrthogonalGroup/Left" to="." method="_on_view_pressed"]

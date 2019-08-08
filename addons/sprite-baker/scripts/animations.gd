@@ -4,11 +4,11 @@ extends VBoxContainer
 const Tools: Script = preload("tools.gd")
 
 const VIEWS: Array = [
-	["front", Vector2(0.0, 0.0)],
-	["rear", Vector2(PI, 0.0)],
-	["left", Vector2(-0.5 * PI, 0.0)],
-	["right", Vector2(0.5 * PI, 0.0)],
-	["top", Vector2(PI, -PI * 0.5)],
+	["Front", Vector2(0.0, 0.0)],
+	["Rear", Vector2(PI, 0.0)],
+	["Left", Vector2(-0.5 * PI, 0.0)],
+	["Right", Vector2(0.5 * PI, 0.0)],
+	["Top", Vector2(PI, -PI * 0.5)],
 ]
 
 export(NodePath) var orientation_path: NodePath

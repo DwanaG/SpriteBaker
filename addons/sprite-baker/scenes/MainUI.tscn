@@ -6,9 +6,9 @@
 [ext_resource path="res://addons/sprite-baker/scripts/dragger.gd" type="Script" id=4]
 [ext_resource path="res://addons/sprite-baker/resources/theme/dragger_line.tres" type="StyleBox" id=5]
 [ext_resource path="res://addons/sprite-baker/scenes/ModelsFrame.tscn" type="PackedScene" id=6]
-[ext_resource path="res://addons/sprite-baker/scenes/AnimationsFrame.tscn" type="PackedScene" id=7]
+[ext_resource path="res://addons/sprite-baker/scenes/PreviewFrame.tscn" type="PackedScene" id=7]
 [ext_resource path="res://addons/sprite-baker/scenes/MaterialsFrame.tscn" type="PackedScene" id=8]
-[ext_resource path="res://addons/sprite-baker/scenes/PreviewFrame.tscn" type="PackedScene" id=9]
+[ext_resource path="res://addons/sprite-baker/scenes/AnimationsFrame.tscn" type="PackedScene" id=9]
 [ext_resource path="res://addons/sprite-baker/scenes/Scene3D.tscn" type="PackedScene" id=10]
 [ext_resource path="res://addons/sprite-baker/scripts/baker.gd" type="Script" id=11]
 
@@ -76,7 +76,7 @@ script = ExtResource( 4 )
 dragger_stylebox = ExtResource( 5 )
 dragger_hover_stylebox = ExtResource( 3 )
 
-[node name="AnimationsFrame" parent="Box/Frames" instance=ExtResource( 7 )]
+[node name="AnimationsFrame" parent="Box/Frames" instance=ExtResource( 9 )]
 anchor_right = 0.0
 anchor_bottom = 0.0
 margin_left = 488.0
@@ -94,7 +94,7 @@ script = ExtResource( 4 )
 dragger_stylebox = ExtResource( 5 )
 dragger_hover_stylebox = ExtResource( 3 )
 
-[node name="PreviewFrame" parent="Box/Frames" instance=ExtResource( 9 )]
+[node name="PreviewFrame" parent="Box/Frames" instance=ExtResource( 7 )]
 anchor_right = 0.0
 anchor_bottom = 0.0
 margin_left = 693.0
