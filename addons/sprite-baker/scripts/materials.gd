@@ -78,17 +78,29 @@ func update_model(model_: Spatial) -> void: # SpriteBaker.Model group function
 		assert(mat_props.connect("material_copied", self, "_on_mat_props_material_copied") == OK)
 		assert(mat_props.connect("paste_material", self, "_on_mat_props_paste_material") == OK)
 		imat += 1
+	set_info(list.size())
 
 
 func clear_model() -> void: # SpriteBaker.Model group function
 	Tools.clear_node(materials_list)
 	model = null
 	mat_dict = {}
+	set_info(0)
 
 
 func update_surface_material(mesh_path: String, surf_index: int, mat: Material): # SpriteBaker.Materials group function
 	var mesh_inst: MeshInstance = model.get_node(mesh_path)
 	mesh_inst.set_surface_material(surf_index, mat)
+
+
+func set_info(nmat: int) -> void:
+	var info_label: Label
+	for node in get_tree().get_nodes_in_group("SpriteBaker.Info"):
+		if node.name == "ModelInfo":
+			info_label = node
+			break
+	var info_txt: String = "Materials: " + String(nmat)
+	info_label.text = Tools.replace_info(info_label.text, info_txt, 1)
 
 
 func _on_mat_props_material_copied(mat: Material) -> void:

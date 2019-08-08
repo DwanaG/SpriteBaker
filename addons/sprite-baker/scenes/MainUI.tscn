@@ -1,4 +1,4 @@
-[gd_scene load_steps=13 format=2]
+[gd_scene load_steps=14 format=2]
 
 [ext_resource path="res://addons/sprite-baker/resources/theme/theme.tres" type="Theme" id=1]
 [ext_resource path="res://addons/sprite-baker/scripts/frames_container.gd" type="Script" id=2]
@@ -11,6 +11,7 @@
 [ext_resource path="res://addons/sprite-baker/scenes/AnimationsFrame.tscn" type="PackedScene" id=9]
 [ext_resource path="res://addons/sprite-baker/scenes/Scene3D.tscn" type="PackedScene" id=10]
 [ext_resource path="res://addons/sprite-baker/scripts/baker.gd" type="Script" id=11]
+[ext_resource path="res://addons/sprite-baker/resources/theme/info_boxstyle.tres" type="StyleBox" id=12]
 
 [sub_resource type="World" id=1]
 
@@ -35,7 +36,7 @@ mouse_filter = 0
 
 [node name="Frames" type="HBoxContainer" parent="Box"]
 margin_right = 1004.0
-margin_bottom = 561.0
+margin_bottom = 560.0
 size_flags_vertical = 3
 script = ExtResource( 2 )
 minimized_size = 25
@@ -45,13 +46,13 @@ min_maximized_size = 70
 anchor_right = 0.0
 anchor_bottom = 0.0
 margin_right = 193.0
-margin_bottom = 561.0
+margin_bottom = 560.0
 size_flags_stretch_ratio = 0.2
 
 [node name="Dragger1" type="VSeparator" parent="Box/Frames"]
 margin_left = 197.0
 margin_right = 201.0
-margin_bottom = 561.0
+margin_bottom = 560.0
 mouse_default_cursor_shape = 10
 custom_styles/separator = ExtResource( 5 )
 script = ExtResource( 4 )
@@ -63,13 +64,13 @@ anchor_right = 0.0
 anchor_bottom = 0.0
 margin_left = 205.0
 margin_right = 476.0
-margin_bottom = 561.0
+margin_bottom = 560.0
 size_flags_stretch_ratio = 0.28
 
 [node name="Dragger2" type="VSeparator" parent="Box/Frames"]
 margin_left = 480.0
 margin_right = 484.0
-margin_bottom = 561.0
+margin_bottom = 560.0
 mouse_default_cursor_shape = 10
 custom_styles/separator = ExtResource( 5 )
 script = ExtResource( 4 )
@@ -81,13 +82,13 @@ anchor_right = 0.0
 anchor_bottom = 0.0
 margin_left = 488.0
 margin_right = 681.0
-margin_bottom = 561.0
+margin_bottom = 560.0
 size_flags_stretch_ratio = 0.2
 
 [node name="Dragger3" type="VSeparator" parent="Box/Frames"]
 margin_left = 685.0
 margin_right = 689.0
-margin_bottom = 561.0
+margin_bottom = 560.0
 mouse_default_cursor_shape = 10
 custom_styles/separator = ExtResource( 5 )
 script = ExtResource( 4 )
@@ -99,15 +100,15 @@ anchor_right = 0.0
 anchor_bottom = 0.0
 margin_left = 693.0
 margin_right = 1004.0
-margin_bottom = 561.0
+margin_bottom = 560.0
 size_flags_stretch_ratio = 0.32
 
-[node name="Info" type="HBoxContainer" parent="Box"]
-margin_top = 565.0
+[node name="InfoBox" type="HBoxContainer" parent="Box"]
+margin_top = 564.0
 margin_right = 1004.0
 margin_bottom = 580.0
 
-[node name="ProgressBar" type="ProgressBar" parent="Box/Info" groups=[
+[node name="ProgressBar" type="ProgressBar" parent="Box/InfoBox" groups=[
 "SpriteBaker.ProgressBar",
 ]]
 margin_right = 120.0
@@ -115,6 +116,26 @@ margin_bottom = 15.0
 rect_min_size = Vector2( 120, 15 )
 max_value = 1.0
 percent_visible = false
+
+[node name="ModelInfo" type="Label" parent="Box/InfoBox" groups=[
+"SpriteBaker.Info",
+]]
+margin_left = 124.0
+margin_right = 562.0
+margin_bottom = 16.0
+size_flags_horizontal = 3
+custom_styles/normal = ExtResource( 12 )
+text = "Tris: 0 | Materials: 0"
+
+[node name="BakeInfo" type="Label" parent="Box/InfoBox" groups=[
+"SpriteBaker.Info",
+]]
+margin_left = 566.0
+margin_right = 1004.0
+margin_bottom = 16.0
+size_flags_horizontal = 3
+custom_styles/normal = ExtResource( 12 )
+text = "Sprite Size: 0x0 | Animations: 0"
 
 [node name="FileDialog" type="FileDialog" parent="." groups=[
 "SpriteBaker.FileDialog",

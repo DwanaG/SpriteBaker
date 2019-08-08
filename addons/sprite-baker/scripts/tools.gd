@@ -34,7 +34,9 @@ static func format_int_with_commas(number: int) -> String:
 		if i != 0:
 			res = "," + res
 		res = n.substr(l - 3 * (i + 1), 3) + res
-	if l % 3 != 0:
+	if l < 3:
+		res = n
+	elif l % 3 != 0:
 		res = n.substr(0, l % 3) + "," + res
 	return res
 
@@ -90,3 +92,13 @@ static func fit_text(text: String, width: int, font: Font) -> String:
 		return out_text
 	else:
 		return text
+
+static func replace_info(in_txt:String, message: String, pos: int) -> String:
+	var split: PoolStringArray = in_txt.split("  |  ")
+	if split.size() <= pos:
+		split.resize(pos + 1)
+	split[pos] = message
+	var out_txt: String = split[0]
+	for i in range(1, split.size()):
+		out_txt += "  |  " + split[i]
+	return out_txt

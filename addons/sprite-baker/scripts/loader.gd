@@ -18,7 +18,7 @@ var progress_group: Array
 
 
 func _exit_tree() -> void:
-	clear()
+	clear_models()
 
 
 func _ready() -> void:
@@ -93,6 +93,11 @@ func update_progress(value: float) -> void:
 
 
 func clear() -> void:
+	clear_models()
+	set_info(0)
+
+
+func clear_models() -> void:
 	for model_path in models_dict:
 		models_dict[model_path].free()
 	models_dict = {}
@@ -103,4 +108,22 @@ func select(id: int) -> void:
 	var model: Spatial = models_dict[file]
 	for node in get_tree().get_nodes_in_group("SpriteBaker.Model"):
 		node.update_model(model)
+
+	var num_tris: int = 0
+	var meshes: Array = Tools.find_nodes_by_type("MeshInstance", model)
+	for meshInst in meshes:
+		var faces: PoolVector3Array = (meshInst as MeshInstance).mesh.get_faces()
+		num_tris += int(faces.size() / 3.0)
+	set_info(num_tris)
+
+
+func set_info(num_tris: int) -> void:
+	var info_label: Label
+	for node in get_tree().get_nodes_in_group("SpriteBaker.Info"):
+		if node.name == "ModelInfo":
+			info_label = node
+			break
+	var info_txt: String = "Tris: " + Tools.format_int_with_commas(num_tris)
+	info_label.text = Tools.replace_info(info_label.text, info_txt, 0)
+
 

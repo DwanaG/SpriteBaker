@@ -4,6 +4,7 @@ extends "view_3d.gd"
 signal pixel_density_changed(value)
 
 const MAX_PIXELS: int = 3840
+const Tools: Script = preload("tools.gd")
 
 var res_x: int = 1
 var res_y: int = 1
@@ -39,6 +40,7 @@ func set_resolution() -> void:
 		pixel_dens = int(res_x / aabb.size.x)
 		emit_signal("pixel_density_changed", pixel_dens)
 	fit_viewport()
+	set_info()
 
 
 func fit_viewport() -> void:
@@ -54,6 +56,16 @@ func fit_viewport() -> void:
 	self.rect_scale = Vector2(scale, scale)
 	self.rect_position = (get_parent().rect_size - self.rect_size) * 0.5
 	rot_factor = scale
+
+
+func set_info() -> void:
+	var info_label: Label
+	for node in get_tree().get_nodes_in_group("SpriteBaker.Info"):
+		if node.name == "BakeInfo":
+			info_label = node
+			break
+	var info_txt: String = "Sprite Size: %dx%d" % [res_x, res_y]
+	info_label.text = Tools.replace_info(info_label.text, info_txt, 0)
 
 
 func _on_Sprite_resized() -> void:

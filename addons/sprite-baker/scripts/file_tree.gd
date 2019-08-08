@@ -97,7 +97,7 @@ func _on_FolderPath_files_updated(file_names: PoolStringArray, base_dir_: String
 	set_column_min_width(Column.EXTENSION, 50)
 	set_column_title(Column.SIZE, COLUMN_TITLES[Column.SIZE])
 	set_column_expand(Column.SIZE, false)
-	set_column_min_width(Column.SIZE, 50)
+	set_column_min_width(Column.SIZE, 80)
 	set_column_title(Column.DIRECTORY, COLUMN_TITLES[Column.DIRECTORY])
 	set_column_expand(Column.DIRECTORY, true)
 	set_column_min_width(Column.DIRECTORY, 80)

@@ -19,6 +19,7 @@ var frame_rate: float = 15.0
 var selected: bool = false
 var item_playing: TreeItem
 var play_state: int = PlayState.STOPPED
+var nanim: int = 0
 
 
 func _ready() -> void:
@@ -59,6 +60,8 @@ func clear_model() -> void: # SpriteBaker.Model group function
 	anim_player = null
 	emit_signal("selected_animations", false)
 	selected = false
+	nanim = 0
+	set_info()
 
 
 func populate_anim_tree() -> void:
@@ -123,6 +126,9 @@ func populate_anim_tree() -> void:
 		item.set_text(Column.FRAMES, String(nframes))
 		item.set_text_align(Column.FRAMES, TreeItem.ALIGN_CENTER)
 		item.set_tooltip(Column.FRAMES, "Number of frames")
+
+	nanim = anim_list.size()
+	set_info()
 
 
 func get_selected_data() -> Dictionary:
@@ -207,6 +213,16 @@ func set_key_frames(_fps: float) -> void: # SpriteBaker.Animation group function
 	pass
 
 
+func set_info() -> void:
+	var info_label: Label
+	for node in get_tree().get_nodes_in_group("SpriteBaker.Info"):
+		if node.name == "BakeInfo":
+			info_label = node
+			break
+	var info_txt: String = "Animations: " + String(nanim)
+	info_label.text = Tools.replace_info(info_label.text, info_txt, 1)
+
+
 func _on_button_pressed(item: TreeItem, column: int, _id: int) -> void:
 	if column == Column.LOOP:
 		var is_loop: bool = not item.get_metadata(Column.LOOP)
@@ -236,10 +252,12 @@ func _on_item_edited() -> void:
 	elif col == Column.CHECK:
 		var anim_selected: bool = item.is_checked(Column.CHECK)
 		if anim_selected:
+			nanim += 1
 			if not selected:
 				selected = true
 				emit_signal("selected_animations", true)
 		else:
+			nanim -= 1
 			item = get_root().get_children()
 			selected = false
 			while item:
@@ -249,6 +267,7 @@ func _on_item_edited() -> void:
 				item = item.get_next()
 			if not selected:
 				emit_signal("selected_animations", false)
+		set_info()
 
 
 func _on_FPS_value_changed(value: float) -> void:
