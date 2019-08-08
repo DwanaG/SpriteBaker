@@ -4,6 +4,7 @@ const BYTE_PREFIX = [
 	"B", "kB", "MB", "TB", "PB"
 ]
 
+
 static func find_nodes_by_type(type: String, parent: Node) -> Array:
 	var nodes: = Array()
 	for child in parent.get_children():
@@ -14,6 +15,7 @@ static func find_nodes_by_type(type: String, parent: Node) -> Array:
 		nodes.append(parent)
 	return nodes
 
+
 static func find_single_node_by_type(type: String, parent: Node) -> Node:
 	var nodes: Array = find_nodes_by_type(type, parent)
 	if nodes.size() == 0:
@@ -22,6 +24,7 @@ static func find_single_node_by_type(type: String, parent: Node) -> Node:
 	if nodes.size() > 1:
 		printerr("Multiple nodes in the same scene not supported for class ", type)
 	return nodes[0] as Node
+
 
 static func format_int_with_commas(number: int) -> String:
 	var n: String = String(number)
@@ -35,15 +38,20 @@ static func format_int_with_commas(number: int) -> String:
 		res = n.substr(0, l % 3) + "," + res
 	return res
 
+
 static func clear_node(node: Node) -> void:
 	for child in node.get_children():
 		node.remove_child(child)
 		child.queue_free()
 
+
 static func is_node_being_edited(node: Node) -> bool:
-	var edited_scene: Node = node.get_tree().edited_scene_root
-	return Engine.is_editor_hint() && edited_scene && \
-		(edited_scene.is_a_parent_of(node) || edited_scene == node)
+	if node.is_inside_tree():
+		var edited_scene: Node = node.get_tree().edited_scene_root
+		return Engine.is_editor_hint() && edited_scene && \
+			(edited_scene.is_a_parent_of(node) || edited_scene == node)
+	else:
+		return false
 
 static func get_addon_path(node: Node) -> String:
 	"""
@@ -62,3 +70,23 @@ static func int_to_bytestr(num: int) -> String:
 		var reduced: float = num / pow(10.0, 3 * order)
 		var decimal: int = int(round((reduced - int(reduced)) * 100.0))
 		return "%d.%02d %s" % [int(reduced), decimal, prefix]
+
+static func fit_text(text: String, width: int, font: Font) -> String:
+	if text == "":
+		return ""
+	var text_width: float = font.get_string_size(text).x
+	var length: int = text.length()
+	if text_width > width:
+		var nchars: int = int(ceil(width * length / text_width))
+		var out_text: String = ".."
+		for ichar in range(nchars, 0, -1):
+			var txt: String = "%s..%s" % \
+				[text.left(int(min(ichar,10))), text.right(length - ichar)]
+			if font.get_string_size(txt).x <= width:
+				if txt.length() >= length:
+					txt = text
+				out_text = txt
+				break
+		return out_text
+	else:
+		return text

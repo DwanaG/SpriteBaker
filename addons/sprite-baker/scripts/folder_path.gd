@@ -3,7 +3,9 @@ extends "line_edit.gd"
 
 signal files_updated(file_names, base_dir)
 
-const SUPPORTED_EXTENSIONS = ["dae", "glb", "obj"]
+# FBX only supported for v3.2 or newer
+const SUPPORTED_EXTENSIONS = ["dae", "glb", "obj", "fbx", "escn"]
+const Tools: Script = preload("tools.gd")
 
 var folder_path: String = "" setget set_folder_path, get_folder_path
 var MARGIN: int
@@ -30,7 +32,7 @@ func set_folder_path(new_path: String) -> void:
 	var dir: = Directory.new()
 	if new_path != "" && dir.dir_exists(new_path):
 		folder_path = new_path
-		if !folder_path.ends_with("/"):
+		if not folder_path.ends_with("/"):
 			folder_path += "/"
 		var files: PoolStringArray = search_files(folder_path, true)
 		emit_signal("files_updated", files, folder_path)
@@ -66,24 +68,5 @@ func is_3d_model(file_name: String) -> bool:
 	return false
 
 
-func fit_text(in_text: String) -> String:
-	if in_text == "":
-		return ""
-	var font: Font = get_font("font")
-	var text_width: float = font.get_string_size(in_text).x
-	var width: float = self.rect_size.x - MARGIN
-	var length: int = in_text.length()
-	if text_width > width:
-		var nchars: int = int(ceil(width * length / text_width))
-		var out_text: String = ".."
-		for ichar in range(nchars, 0, -1):
-			var txt: String = "%s..%s" % \
-				[in_text.left(int(min(ichar,10))), in_text.right(length - ichar)]
-			if font.get_string_size(txt).x <= width:
-				if txt.length() >= length:
-					txt = in_text
-				out_text = txt
-				break
-		return out_text
-	else:
-		return in_text
+func fit_text(text: String) -> String:
+	return Tools.fit_text(text, int(self.rect_size.x - MARGIN), get_font("font"))

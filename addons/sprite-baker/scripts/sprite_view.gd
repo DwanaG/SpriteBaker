@@ -1,5 +1,5 @@
 tool
-extends "model_viewport.gd"
+extends "view_3d.gd"
 
 signal pixel_density_changed(value)
 
@@ -16,13 +16,17 @@ func _notification(what: int) -> void:
 		self.rect_pivot_offset = self.rect_size * 0.5
 
 
-func update_model(model: Spatial) -> void:
-	.update_model(model)
-	adjust_viewport()
+func update_model(model: Spatial) -> void: # SpriteBaker.Model group function
+	scene3d.set_model(model)
+	set_resolution()
+	scene3d.adjust_camera()
+	rotx = 0.0
+	roty = 0.0
+	process_gui = true
 
 
-func adjust_viewport() -> void:
-	var aabb: AABB = $Viewport3D/Scene3D.aabb
+func set_resolution() -> void:
+	var aabb: AABB = scene3d.aabb
 	res_x = int(ceil(aabb.size.x * pixel_dens))
 	res_y = int(ceil(aabb.size.y * pixel_dens))
 	if res_x > MAX_PIXELS || res_y > MAX_PIXELS:
@@ -34,31 +38,29 @@ func adjust_viewport() -> void:
 			res_y = MAX_PIXELS
 		pixel_dens = int(res_x / aabb.size.x)
 		emit_signal("pixel_density_changed", pixel_dens)
-	fit_model()
+	fit_viewport()
 
 
-func fit_model() -> void:
+func fit_viewport() -> void:
 	var pratio: float = get_parent().rect_size.x / get_parent().rect_size.y
 	var ratio: float = res_x / float(res_y)
 	var scale: float
 	if ratio > pratio:
 		scale = get_parent().rect_size.x / res_x
 		self.rect_size = Vector2(res_x, int(get_parent().rect_size.y / scale))
-		$Viewport3D/Scene3D.set_camera_size_factor(self.rect_size.y / res_y)
 	else:
 		scale = get_parent().rect_size.y / res_y
 		self.rect_size = Vector2(int(get_parent().rect_size.x / scale), res_y)
-		$Viewport3D/Scene3D.set_camera_size_factor(1.0)
 	self.rect_scale = Vector2(scale, scale)
 	self.rect_position = (get_parent().rect_size - self.rect_size) * 0.5
 	rot_factor = scale
 
 
 func _on_Sprite_resized() -> void:
-	if $Viewport3D/Scene3D.model:
-		fit_model()
+	if scene3d.model:
+		fit_viewport()
 
 
 func _on_PixelDensity_value_changed(value: float) -> void:
 	pixel_dens = value
-	adjust_viewport()
+	set_resolution()

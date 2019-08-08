@@ -1,10 +1,7 @@
 tool
-extends SplitContainer
+extends VSplitContainer
 
-const Tools: Script = preload("tools.gd")
-
-const PlayIcon: Texture = preload("res://addons/sprite-baker/icons/play.svg")
-const PauseIcon: Texture = preload("res://addons/sprite-baker/icons/pause.svg")
+signal animation_finished
 
 const ROTATIONS: Dictionary = {
 	"Front": Vector2(0.0, 0.0),
@@ -13,225 +10,284 @@ const ROTATIONS: Dictionary = {
 	"Right": Vector2(0.5 * PI, 0.0),
 	"Top": Vector2(PI, -PI * 0.5),
 }
+const Tools: Script = preload("tools.gd")
 
+const PlayIcon: Texture = preload("res://addons/sprite-baker/resources/icons/play.svg")
+const PauseIcon: Texture = preload("res://addons/sprite-baker/resources/icons/pause.svg")
+const SpatialIcon: Texture = preload("res://addons/sprite-baker/resources/icons/spatial.svg")
+const SkeletonIcon: Texture = preload("res://addons/sprite-baker/resources/icons/skeleton.svg")
+const BoneIcon: Texture = preload("res://addons/sprite-baker/resources/icons/bone.svg")
+const NodeIcon: Texture = preload("res://addons/sprite-baker/resources/icons/node.svg")
+
+export(ButtonGroup) var view_buttons_group: ButtonGroup
+export(NodePath) var rx_spin_path: NodePath
+export(NodePath) var ry_spin_path: NodePath
+export(NodePath) var loop_button_path: NodePath
+export(NodePath) var play_button_path: NodePath
+export(NodePath) var stop_button_path: NodePath
+export(NodePath) var time_spin_path: NodePath
+export(NodePath) var timeline_path: NodePath
+export(NodePath) var bake_path: NodePath
 export(NodePath) var pixel_density_path: NodePath
-export(NodePath) var margin_path: NodePath
 export(NodePath) var root_motion_dialog_path: NodePath
 export(NodePath) var root_motion_clear_path: NodePath
 export(NodePath) var root_motion_path: NodePath
 export(NodePath) var bones_tree_path: NodePath
-export(NodePath) var timeline_path: NodePath
-export(NodePath) var play_path: NodePath
-export(NodePath) var stop_path: NodePath
-export(NodePath) var time_spin_path: NodePath
-export(NodePath) var loop_path: NodePath
-export(NodePath) var front_view_path: NodePath
-export(NodePath) var rx_spin_path: NodePath
-export(NodePath) var ry_spin_path: NodePath
-export(NodePath) var bake_button_path: NodePath
-export(ButtonGroup) var view_buttons_group: ButtonGroup
 
+onready var rx_spin: SpinBox = get_node(rx_spin_path)
+onready var ry_spin: SpinBox = get_node(ry_spin_path)
+onready var loop_button: Button = get_node(loop_button_path)
+onready var play_button: Button = get_node(play_button_path)
+onready var stop_button: Button = get_node(stop_button_path)
+onready var time_spin: SpinBox = get_node(time_spin_path)
+onready var timeline: BoxContainer = get_node(timeline_path)
+onready var bake: Button = get_node(bake_path)
 onready var pixel_density: SpinBox = get_node(pixel_density_path)
-onready var margin: SpinBox = get_node(margin_path)
+onready var root_motion_dialog: ConfirmationDialog = get_node(root_motion_dialog_path)
 onready var root_motion_clear: Button = get_node(root_motion_clear_path)
 onready var root_motion: Button = get_node(root_motion_path)
 onready var bones_tree: Tree = get_node(bones_tree_path)
-onready var timeline: Container = get_node(timeline_path)
-onready var play: Button = get_node(play_path)
-onready var stop: Button = get_node(stop_path)
-onready var time_spin: SpinBox = get_node(time_spin_path)
-onready var loop: Button = get_node(loop_path)
-onready var rx_spin: SpinBox = get_node(rx_spin_path)
-onready var ry_spin: SpinBox = get_node(ry_spin_path)
-onready var bake_button: Button = get_node(bake_button_path)
 
+var view_pressed: bool = false
+var anim_name: String = ""
 var anim_player: AnimationPlayer
-var current_animation: String = ""
-var pressed_view_button: Button
-var model: Spatial
+var playing: bool = false
+var looping: bool = false
+var anim_length: float = 0.0
+var time: float = 0.0
+var fps: float = 0.0
 
 
-func update_model(model_: Spatial) -> void:
-	model = model_
+func _ready() -> void:
+	set_physics_process(false)
+
+
+func _physics_process(delta: float) -> void:
+	time += delta
+	var finished: bool = false
+	if looping:
+		time = fmod(time, anim_length)
+	elif time >= anim_length:
+		finished = true
+		time = anim_length
+	for node in get_tree().get_nodes_in_group("SpriteBaker.Animation"):
+		node.set_anim_time(time)
+	timeline.set_time(time)
+	if finished:
+		for node in get_tree().get_nodes_in_group("SpriteBaker.Animation"):
+			node.play(anim_name)
+		time = 0.0
+		emit_signal("animation_finished")
+
+
+func update_model(model: Spatial) -> void: # SpriteBaker.Model group function
 	anim_player = Tools.find_single_node_by_type("AnimationPlayer", model)
-	pressed_view_button = get_node(front_view_path)
-	pressed_view_button.pressed = true
-	if current_animation != "":
-		stop_animation(true)
+	set_bones_tree(model)
 
 
-func clear_model() -> void:
-	current_animation = ""
+func clear_model() -> void: # SpriteBaker.Model group function
 	anim_player = null
-	stop_animation(true)
-	timeline.clear()
-	deselect_views()
 
 
-func get_animation(anim_name: String) -> Animation:
-	return anim_player.get_animation(anim_name)
-
-
-func play_animation(anim_name: String) -> void:
-	if Tools.is_node_being_edited(self):
-		return
-	current_animation = anim_name
-	var anim: Animation = anim_player.get_animation(anim_name)
-	timeline.play_animation(anim.length, anim.loop)
-	play.disabled = false
-	play.icon = PauseIcon
-	stop.disabled = false
-	time_spin.editable = true
-	time_spin.value = 0.0
-	time_spin.max_value = timeline.anim_length
-	loop.disabled = false
-	loop.pressed = anim.loop
-	bake_button.disabled = false
-
-
-func stop_animation(back_to_rest: bool) -> void:
-	current_animation = ""
-	timeline.stop_animation(back_to_rest)
-	if back_to_rest:
-		play.disabled = true
-		play.icon = PlayIcon
-		stop.disabled = true
-		time_spin.editable = false
-		time_spin.value = 0.0
-		loop.pressed = false
-		loop.disabled = true
-	bake_button.disabled = true
-
-
-func reset_animation() -> void:
-	timeline.reset_animation()
-	time_spin.value = 0.0
-
-
-func set_animation_loop(anim_name: String, value: bool) -> void:
-	anim_player.get_animation(anim_name).loop = value
-	if anim_name == current_animation:
-		timeline.looping = value
-		loop.pressed = value
-
-
-func rotate_model(rx: float, ry: float) -> void:
-	deselect_views()
+func rotate_model(rx: float, ry: float) -> void: # SpriteBaker.Viewport group function
 	rx_spin.value = rad2deg(rx)
 	ry_spin.value = rad2deg(ry)
+	if not view_pressed:
+		for button in view_buttons_group.get_buttons():
+			button.pressed = false
 
 
-func deselect_views() -> void:
-	for button in view_buttons_group.get_buttons():
-		button.pressed = false
+func set_root_motion_track(_root_path: String, _bone_id: int) -> void:  # SpriteBaker.Viewport group function
+	if anim_name != "":
+		var aname: String = anim_name
+		var p: bool = playing
+		# Stopping the animation and reseting the skeleton position will avoid errors
+		# when a root motion node is assigned
+		for node in get_tree().get_nodes_in_group("SpriteBaker.Animation"):
+			node.stop()
+			node.play(aname)
+			if not p:
+				node.play(aname) # Pause the animation if it was paused
 
 
-func set_frame_rate(fps: float) -> void:
-	timeline.set_frame_rate(fps)
+func set_loop(aname: String, loop: bool) -> void: # SpriteBaker.Animation group function
+	if aname == anim_name:
+		loop_button.pressed = loop
+		looping = loop
 
 
-func _on_SpriteView_pixel_density_changed(value: float) -> void:
-	pixel_density.value = value
+func play(aname: String) -> void: # SpriteBaker.Animation group function
+	if aname == anim_name:
+		if playing:
+			play_button.icon = PlayIcon
+			set_physics_process(false)
+		else:
+			play_button.icon = PauseIcon
+			set_physics_process(true)
+		playing = not playing
+	else:
+		anim_name = aname
+		var anim: Animation = anim_player.get_animation(aname)
+		loop_button.disabled = false
+		looping = anim.loop
+		loop_button.pressed = looping
+		play_button.disabled = false
+		play_button.icon = PauseIcon
+		stop_button.disabled = false
+		playing = true
+		anim_length = anim.length
+		time_spin.max_value = anim_length
+		timeline.set_timeline(anim_length)
+		time = 0.0
+		bake.disabled = false
+		set_physics_process(true)
+
+
+func stop() -> void: # SpriteBaker.Animation group function
+	anim_name = ""
+	loop_button.disabled = true
+	play_button.disabled = true
+	play_button.icon = PlayIcon
+	stop_button.disabled = true
+	playing = false
+	time_spin.value = 0.0
+	time = 0.0
+	timeline.clear()
+	bake.disabled = true
+	set_physics_process(false)
+
+
+func set_anim_time(time_: float) -> void: # SpriteBaker.Animation group function
+	time_spin.value = time_
+
+
+func set_key_frames(fps_: float) -> void: # SpriteBaker.Animation group function
+	fps = fps_
+
+
+func set_bones_tree(model: Spatial) -> void:
+	bones_tree.clear()
+	if not model:
+		return
+	var skeleton: Skeleton = Tools.find_single_node_by_type("Skeleton", model)
+	if not skeleton:
+		root_motion.disabled = true
+		return
+	root_motion.disabled = false
+	var parent: Node = model
+	var hierarchy: Array = []
+	while parent != skeleton:
+		for child in parent.get_children():
+			if child.is_a_parent_of(skeleton) || child == skeleton:
+				hierarchy.append(child)
+				parent = child
+				break
+	var item: TreeItem = null
+	var path: String = ""
+	for node in hierarchy:
+		item = bones_tree.create_item(item)
+		var icon: Texture = null
+		if node is Skeleton:
+			icon = SkeletonIcon
+		elif node is Spatial:
+			icon = SpatialIcon
+		else:
+			icon = NodeIcon
+		if path != "":
+			path += "/"
+		path += node.name
+		item.set_cell_mode(0, TreeItem.CELL_MODE_CUSTOM)
+		item.set_icon(0, icon)
+		item.set_text(0, node.name)
+		if node is Spatial:
+			item.set_metadata(0, [path, -1])
+		else:
+			item.set_selectable(0, false)
+	var bone_items: Dictionary = {}
+	bone_items[-1] = item
+	for ibone in skeleton.get_bone_count():
+		add_bone_to_tree(bone_items, skeleton, ibone, path)
+
+
+func add_bone_to_tree(dict: Dictionary, skeleton: Skeleton, ibone: int, path: String) -> void:
+	if dict.has(ibone):
+		return
+	var parent_id: int = skeleton.get_bone_parent(ibone)
+	if not dict.has(parent_id):
+		add_bone_to_tree(dict, skeleton, parent_id, path)
+	var parent: TreeItem = dict[parent_id]
+	var item: TreeItem = bones_tree.create_item(parent)
+	item.set_cell_mode(0, TreeItem.CELL_MODE_CUSTOM)
+	item.set_icon(0, BoneIcon)
+	item.set_text(0, skeleton.get_bone_name(ibone))
+	item.set_metadata(0, [path, ibone])
+	dict[ibone] = item
+
+
+func select_root_motion() -> void:
+	var selected: TreeItem = bones_tree.get_selected()
+	if selected:
+		root_motion.text = selected.get_text(0)
+		root_motion.icon = selected.get_icon(0)
+		root_motion_clear.disabled = false
+		var data: Array = selected.get_metadata(0)
+		var root_path: String = data[0]
+		var bone_id: int = data[1]
+		for node in get_tree().get_nodes_in_group("SpriteBaker.Viewport"):
+			node.set_root_motion_track(root_path, bone_id)
+
+
+func _on_view_pressed() -> void:
+	var button: Button = view_buttons_group.get_pressed_button()
+	view_pressed = true
+	var rot: Vector2 = ROTATIONS[button.name]
+	for node in get_tree().get_nodes_in_group("SpriteBaker.Viewport"):
+		node.rotate_model(rot.x, rot.y)
+	view_pressed = false
+
+
+func _on_Loop_toggled(button_pressed: bool) -> void:
+	for node in get_tree().get_nodes_in_group("SpriteBaker.Animation"):
+		node.set_loop(anim_name, button_pressed)
+
+
+func _on_Play_pressed() -> void:
+	for node in get_tree().get_nodes_in_group("SpriteBaker.Animation"):
+		node.play(anim_name)
+
+
+func _on_Stop_pressed() -> void:
+	for node in get_tree().get_nodes_in_group("SpriteBaker.Animation"):
+		node.stop()
+
+
+func _on_Timeline_time_changed(t: float) -> void:
+	time = t
+	if not playing:
+		for node in get_tree().get_nodes_in_group("SpriteBaker.Animation"):
+			node.set_anim_time(time)
 
 
 func _on_RootMotion_pressed() -> void:
-	get_node(root_motion_dialog_path).popup_centered(Vector2(340, 500))
-
-
-func _on_BonesTree_root_motion_selected(root_path: String, id: int) -> void:
-	root_motion_clear.disabled = false
-	for node in get_tree().get_nodes_in_group("3D2SS.ModelAnimation"):
-		node.reset_animation()
-	for node in get_tree().get_nodes_in_group("3D2SS.Model"):
-		node.set_root_motion_track(root_path, id)
+	root_motion_dialog.popup_centered(Vector2(340, 500))
 
 
 func _on_RootMotionClear_pressed() -> void:
 	root_motion_clear.disabled = true
 	root_motion.text = "Assign..."
 	root_motion.icon = null
-	for node in get_tree().get_nodes_in_group("3D2SS.Model"):
-		node.clear_root_motion_track()
+	for node in get_tree().get_nodes_in_group("SpriteBaker.Viewport"):
+		node.set_root_motion_track("", 0)
 
 
-func _on_Timeline_time_changed(time) -> void:
-	time_spin.value = time
+func _on_BonesTree_item_activated() -> void:
+	select_root_motion()
+	root_motion_dialog.hide()
 
 
-func _on_Time_value_changed(value: float) -> void:
-	timeline.set_time(value)
+func _on_RootMotionDialog_confirmed() -> void:
+	select_root_motion()
 
 
-func _on_Play_pressed() -> void:
-	if timeline.paused:
-		timeline.resume_animation()
-		play.icon = PauseIcon
-	else:
-		timeline.pause_animation()
-		play.icon = PlayIcon
-
-
-func _on_Stop_pressed() -> void:
-	for node in get_tree().get_nodes_in_group("3D2SS.ModelAnimation"):
-		node.stop_animation(true)
-	for node in get_tree().get_nodes_in_group("3D2SS.ModelData"):
-		if node.name == "AnimationsTree":
-			node.stop_item_playing()
-			break
-
-
-func _on_Loop_toggled(button_pressed: bool) -> void:
-	if current_animation != "":
-		for node in get_tree().get_nodes_in_group("3D2SS.ModelAnimation"):
-			node.set_animation_loop(current_animation, button_pressed)
-		for node in get_tree().get_nodes_in_group("3D2SS.ModelData"):
-			if node.name == "AnimationsTree":
-				node.set_item_playing_looping(button_pressed)
-
-
-func _on_Timeline_animation_finished() -> void:
-	play.icon = PlayIcon
-
-
-func _on_view_pressed() -> void:
-	var button: Button = view_buttons_group.get_pressed_button()
-	if not button:
-		pressed_view_button.pressed = true
-		return
-	var rot: Vector2 = ROTATIONS[button.name]
-	for node in get_tree().get_nodes_in_group("3D2SS.ModelViewport"):
-		if node == self:
-			rx_spin.value = rad2deg(rot.x)
-			ry_spin.value = rad2deg(rot.y)
-			continue
-		node.rotate_model(rot.x, rot.y)
-	button.pressed = true
-	pressed_view_button = button
-
-
-func _on_rot_value_changed(_value: float) -> void:
-	deselect_views()
-	var rotx: float = deg2rad(rx_spin.value)
-	var roty: float = deg2rad(ry_spin.value)
-	for node in get_tree().get_nodes_in_group("3D2SS.ModelViewport"):
-		if node == self:
-			continue
-		node.rotate_model(rotx, roty)
-
-
-func _on_BakeAnim_pressed() -> void:
-	var bake: Node
-	for node in get_tree().get_nodes_in_group("3D2SS.Bake"):
-		if node.name == "Bake":
-			bake = node
-			break
-	var scene: Spatial = bake.scene_3d
-	scene.set_model(model.duplicate())
-	scene.set_animation_loop(current_animation, loop.pressed)
-	var rotx: float = deg2rad(rx_spin.value)
-	var roty: float = deg2rad(ry_spin.value)
-	scene.rotate_model(rotx, roty)
-	if bones_tree.get_selected():
-		var data: Array = bones_tree.get_selected().get_metadata(0)
-		scene.set_root_motion_track(data[0], data[1])
-	bake.bake_animation(current_animation, pixel_density.value, margin.value, timeline.keys)
+func _on_SpriteView_pixel_density_changed(value: float) -> void:
+	pixel_density.value = value
