@@ -40,6 +40,7 @@ func set_resolution() -> void:
 		pixel_dens = int(res_x / aabb.size.x)
 		emit_signal("pixel_density_changed", pixel_dens)
 	fit_viewport()
+	scene3d.set_pp_pixel_size(1.0 / float(res_x), 1.0 / float(res_y))
 	set_info()
 
 

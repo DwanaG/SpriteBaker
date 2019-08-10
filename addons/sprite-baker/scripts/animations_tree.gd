@@ -120,10 +120,7 @@ func populate_anim_tree() -> void:
 		item.set_tooltip(Column.LENGTH, "Animation lenght (in seconds)")
 
 		# Number of frames
-		var nframes: int = int(round(anim.length * frame_rate))
-		if not is_loop:
-			nframes += 1
-		item.set_text(Column.FRAMES, String(nframes))
+		set_item_frames(item, frame_rate)
 		item.set_text_align(Column.FRAMES, TreeItem.ALIGN_CENTER)
 		item.set_tooltip(Column.FRAMES, "Number of frames")
 
@@ -153,6 +150,7 @@ func set_loop(anim_name: String, loop: bool) -> void: # SpriteBaker.Animation gr
 	if item:
 		var icon: Texture = LoopActiveIcon if loop else LoopIcon
 		item.set_button(Column.LOOP, 0, icon)
+		set_item_frames(item, item.get_range(Column.FPS))
 
 
 func get_frame_keys(item: TreeItem) -> Array:
@@ -223,6 +221,14 @@ func set_info() -> void:
 	info_label.text = Tools.replace_info(info_label.text, info_txt, 1)
 
 
+func set_item_frames(item: TreeItem, fps: float) -> void:
+	var anim: Animation = anim_player.get_animation(item.get_metadata(Column.NAME))
+	var nframes: int = int(round(anim.length * fps))
+	if not anim.loop:
+		nframes += 1
+	item.set_text(Column.FRAMES, String(nframes))
+
+
 func _on_button_pressed(item: TreeItem, column: int, _id: int) -> void:
 	if column == Column.LOOP:
 		var is_loop: bool = not item.get_metadata(Column.LOOP)
@@ -244,11 +250,7 @@ func _on_item_edited() -> void:
 	var item: TreeItem = get_edited()
 	if col == Column.FPS:
 		var fps: float = item.get_range(Column.FPS)
-		var anim: Animation = anim_player.get_animation(item.get_metadata(Column.NAME))
-		var nframes: int = int(round(anim.length * fps))
-		if not anim.loop:
-			nframes += 1
-		item.set_text(Column.FRAMES, String(nframes))
+		set_item_frames(item, fps)
 	elif col == Column.CHECK:
 		var anim_selected: bool = item.is_checked(Column.CHECK)
 		if anim_selected:
@@ -275,5 +277,6 @@ func _on_FPS_value_changed(value: float) -> void:
 	while item:
 		if item.get_range(Column.FPS) == frame_rate:
 			item.set_range(Column.FPS, value)
+			set_item_frames(item, value)
 		item = item.get_next()
 	frame_rate = value

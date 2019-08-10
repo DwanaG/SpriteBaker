@@ -6,8 +6,8 @@ const Tools: Script = preload("tools.gd")
 const VIEWS: Array = [
 	["Front", Vector2(0.0, 0.0)],
 	["Rear", Vector2(PI, 0.0)],
-	["Left", Vector2(-0.5 * PI, 0.0)],
-	["Right", Vector2(0.5 * PI, 0.0)],
+	["Right", Vector2(-0.5 * PI, 0.0)],
+	["Left", Vector2(0.5 * PI, 0.0)],
 	["Top", Vector2(PI, -PI * 0.5)],
 ]
 

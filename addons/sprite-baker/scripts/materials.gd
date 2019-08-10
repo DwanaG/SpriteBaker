@@ -21,14 +21,28 @@ materials_group_node.update_surface_material(mesh_nodepath, surface_index, mater
 
 const Tools: Script = preload("tools.gd")
 
+const NoOutlineIcon: Texture = preload("res://addons/sprite-baker/resources/icons/outline_no.svg")
+const OutlineIcon: Texture = preload("res://addons/sprite-baker/resources/icons/outline.svg")
+const PixelOutlineIcon: Texture = preload("res://addons/sprite-baker/resources/icons/outline_pixel.svg")
+
+enum OutlineState {NO_OL, OL, PIXEL_OL}
+
 export(PackedScene) var material_param_scn: PackedScene
 export(NodePath) var materials_list_path: NodePath
+export(NodePath) var outline_path: NodePath
+export(NodePath) var outline_color_path: NodePath
+export(NodePath) var pixel_box_path: NodePath
 
 onready var materials_list: BoxContainer = get_node(materials_list_path)
+onready var outline: Button = get_node(outline_path)
+onready var outline_color: ColorPickerButton = get_node(outline_color_path)
+onready var pixel_box: BoxContainer = get_node(pixel_box_path)
 
 var model: Spatial
 var mat_dict: Dictionary
 var copied_material: Material
+var outline_state: int = OutlineState.NO_OL
+
 
 func update_model(model_: Spatial) -> void: # SpriteBaker.Model group function
 	yield(get_tree(), "idle_frame") # Wait for all nodes to update the model
@@ -111,3 +125,43 @@ func _on_mat_props_material_copied(mat: Material) -> void:
 
 func _on_mat_props_paste_material(slot: Control, unique: bool) -> void:
 	slot.paste_material(copied_material, unique)
+
+
+func _on_Outline_pressed() -> void:
+	if outline_state == OutlineState.NO_OL:
+		outline_state = OutlineState.OL
+		outline.icon = OutlineIcon
+		outline.hint_tooltip = "Toggle outline: outline"
+		outline_color.disabled = false
+		pixel_box.hide()
+	elif outline_state == OutlineState.OL:
+		outline_state = OutlineState.PIXEL_OL
+		outline.icon = PixelOutlineIcon
+		outline.hint_tooltip = "Toggle outline: pixel outline"
+		outline_color.disabled = false
+		pixel_box.show()
+		for node in get_tree().get_nodes_in_group("SpriteBaker.PostProcess"):
+			node.post_process = true
+	elif outline_state == OutlineState.PIXEL_OL:
+		outline_state = OutlineState.NO_OL
+		outline.icon = NoOutlineIcon
+		outline.hint_tooltip = "Toggle outline: no outline"
+		outline_color.disabled = true
+		pixel_box.hide()
+		for node in get_tree().get_nodes_in_group("SpriteBaker.PostProcess"):
+			node.post_process = false
+
+
+func _on_Blend_toggled(checked: bool) -> void:
+	for node in get_tree().get_nodes_in_group("SpriteBaker.PostProcess"):
+		node.set_pp_blend(checked)
+
+
+func _on_Depth_toggled(checked: bool) -> void:
+	for node in get_tree().get_nodes_in_group("SpriteBaker.PostProcess"):
+		node.set_pp_use_depth(checked)
+
+
+func _on_DepthValue_value_changed(value: float) -> void:
+	for node in get_tree().get_nodes_in_group("SpriteBaker.PostProcess"):
+		node.set_pp_depth_cutoff(value)

@@ -4,6 +4,9 @@ extends Spatial
 const Tools: Script = preload("tools.gd")
 const AABB_EXTRA_FACTOR: float = 1.05
 
+export(bool) var post_process: bool = false setget set_post_process, get_post_process
+export(ShaderMaterial) var post_process_material: ShaderMaterial
+
 onready var remote_xform: RemoteTransform = $RemoteTransform
 onready var camera: Camera = $Base/Camera
 onready var bone: BoneAttachment = $Bone
@@ -15,6 +18,18 @@ var anim_player: AnimationPlayer
 var skeleton: Skeleton
 var rest_xforms: Array = []
 var cam_pos: Vector3
+
+
+func set_post_process(value: bool) -> void:
+	post_process = value
+	if post_process:
+		$Base/Camera/PostProcess.show()
+	else:
+		$Base/Camera/PostProcess.hide()
+
+
+func get_post_process() -> bool:
+	return post_process
 
 
 func set_model(model_: Spatial) -> void:
@@ -32,6 +47,8 @@ func set_model(model_: Spatial) -> void:
 		add_child(model)
 		meshes = Tools.find_nodes_by_type("MeshInstance", model)
 		anim_player = Tools.find_single_node_by_type("AnimationPlayer", model)
+		anim_player.method_call_mode = AnimationPlayer.ANIMATION_METHOD_CALL_IMMEDIATE
+		anim_player.playback_process_mode = AnimationPlayer.ANIMATION_PROCESS_MANUAL
 		if anim_player:
 			anim_player.playback_process_mode = AnimationPlayer.ANIMATION_PROCESS_MANUAL
 		skeleton = Tools.find_single_node_by_type("Skeleton", model)
@@ -150,5 +167,27 @@ func clear_root_motion_track() -> void:
 	remote_xform.remote_path = $Base.get_path()
 	$Base.transform = Transform()
 	camera.translation = cam_pos
+
+
+func set_outline_color(color: Color) -> void:
+	if post_process:
+		post_process_material.set_shader_param("outline_color", color)
+
+
+func set_pp_depth_cutoff(value: float) -> void:
+	post_process_material.set_shader_param("depth_cutoff", value)
+
+
+func set_pp_use_depth(value: bool) -> void:
+	post_process_material.set_shader_param("use_depth", value)
+
+
+func set_pp_blend(value: bool) -> void:
+	post_process_material.set_shader_param("blend", value)
+
+
+func set_pp_pixel_size(px: float, py: float) -> void:
+	post_process_material.set_shader_param("px_x", px)
+	post_process_material.set_shader_param("px_y", py)
 
 

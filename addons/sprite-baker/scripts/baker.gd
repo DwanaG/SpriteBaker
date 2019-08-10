@@ -17,6 +17,7 @@ var ianim: int
 var ikey: int
 var sprites: Array = []
 var wait_frame: bool = false
+var animation_finished: bool = true
 
 
 func _ready() -> void:
@@ -27,7 +28,7 @@ func _process(_delta: float) -> void:
 	if wait_frame:
 		wait_frame = false
 		return
-	if not scene3d.anim_player.is_playing():
+	if animation_finished:
 		if iview == views.size():
 			ianim += 1
 			if ianim == anim_names.size():
@@ -35,9 +36,11 @@ func _process(_delta: float) -> void:
 				return
 			iview = 0
 		set_view()
+		ikey = 0
 		anim_player.play(anim_names[ianim])
 		anim_player.seek(anim_fkeys[ianim][ikey], true)
 		wait_frame = true
+		animation_finished = false
 	else:
 		var texture: = ImageTexture.new()
 		texture.create_from_image($Viewport3D.get_texture().get_data(), 0)
@@ -47,8 +50,8 @@ func _process(_delta: float) -> void:
 			make_sprite_sheet(anim_names[ianim])
 			anim_player.stop(false)
 			sprites = []
-			ikey = 0
 			iview += 1
+			animation_finished = true
 		else:
 			anim_player.seek(anim_fkeys[ianim][ikey], true)
 
@@ -64,7 +67,6 @@ func clear_model() -> void: # SpriteBaker.Model group function
 func bake(data: Dictionary) -> void:  # SpriteBaker.Bake group function
 	scene3d.set_model(model)
 	set_resolution(data["pixel_density"], data["margin"])
-	scene3d.adjust_camera()
 	anim_player = scene3d.anim_player
 	views = data["views"]
 	var anim_data: Dictionary = data["animations"]
@@ -75,16 +77,23 @@ func bake(data: Dictionary) -> void:  # SpriteBaker.Bake group function
 		scene3d.set_root_motion_track(data["root_motion:path"], data["root_motion:bone_id"])
 	iview = 0
 	ianim = 0
-	ikey = 0
+	animation_finished = true
 	set_process(true)
 
 
-func set_resolution(pixel_dens: float, margin: float) -> void:
+func set_resolution(pixel_dens: float, margin: int) -> void:
 	var aabb: AABB = scene3d.aabb
 	var res_x: int = int(ceil(aabb.size.x * pixel_dens))
 	var res_y: int = int(ceil(aabb.size.y * pixel_dens))
-	scene3d.camera.size += 2.0 * margin / pixel_dens
 	$Viewport3D.size = Vector2(res_x, res_y)
+	scene3d.adjust_camera()
+
+	# Add margin
+	var dblmargin: int = 2 * margin
+	res_x += dblmargin
+	res_y += dblmargin
+	$Viewport3D.size = Vector2(res_x, res_y)
+	scene3d.camera.size += dblmargin / pixel_dens
 
 
 func make_sprite_sheet(aname: String) -> void:

@@ -6,8 +6,8 @@ signal animation_finished
 const ROTATIONS: Dictionary = {
 	"Front": Vector2(0.0, 0.0),
 	"Rear": Vector2(PI, 0.0),
-	"Left": Vector2(-0.5 * PI, 0.0),
-	"Right": Vector2(0.5 * PI, 0.0),
+	"Right": Vector2(-0.5 * PI, 0.0),
+	"Left": Vector2(0.5 * PI, 0.0),
 	"Top": Vector2(PI, -PI * 0.5),
 }
 const Tools: Script = preload("tools.gd")
@@ -83,6 +83,10 @@ func _physics_process(delta: float) -> void:
 func update_model(model: Spatial) -> void: # SpriteBaker.Model group function
 	anim_player = Tools.find_single_node_by_type("AnimationPlayer", model)
 	set_bones_tree(model)
+	for button in view_buttons_group.get_buttons():
+		if button.name == "Front":
+			button.pressed = true
+			break
 
 
 func clear_model() -> void: # SpriteBaker.Model group function
