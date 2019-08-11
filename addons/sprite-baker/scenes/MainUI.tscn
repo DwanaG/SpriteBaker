@@ -5,8 +5,8 @@
 [ext_resource path="res://addons/sprite-baker/resources/theme/dragger_line_hover.tres" type="StyleBox" id=3]
 [ext_resource path="res://addons/sprite-baker/scripts/dragger.gd" type="Script" id=4]
 [ext_resource path="res://addons/sprite-baker/resources/theme/dragger_line.tres" type="StyleBox" id=5]
-[ext_resource path="res://addons/sprite-baker/scenes/MaterialsFrame.tscn" type="PackedScene" id=6]
-[ext_resource path="res://addons/sprite-baker/scenes/ModelsFrame.tscn" type="PackedScene" id=7]
+[ext_resource path="res://addons/sprite-baker/scenes/ModelsFrame.tscn" type="PackedScene" id=6]
+[ext_resource path="res://addons/sprite-baker/scenes/MaterialsFrame.tscn" type="PackedScene" id=7]
 [ext_resource path="res://addons/sprite-baker/scenes/PreviewFrame.tscn" type="PackedScene" id=8]
 [ext_resource path="res://addons/sprite-baker/scenes/AnimationsFrame.tscn" type="PackedScene" id=9]
 [ext_resource path="res://addons/sprite-baker/scenes/Scene3D.tscn" type="PackedScene" id=10]
@@ -14,10 +14,10 @@
 [ext_resource path="res://addons/sprite-baker/resources/theme/info_boxstyle.tres" type="StyleBox" id=12]
 [ext_resource path="res://addons/sprite-baker/resources/environment.tres" type="Environment" id=13]
 
-[sub_resource type="World" id=2]
+[sub_resource type="World" id=1]
 environment = ExtResource( 13 )
 
-[sub_resource type="World" id=1]
+[sub_resource type="World" id=2]
 
 [node name="MainUI" type="MarginContainer"]
 anchor_right = 1.0
@@ -46,7 +46,7 @@ script = ExtResource( 2 )
 minimized_size = 25
 min_maximized_size = 70
 
-[node name="ModelsFrame" parent="Box/Frames" instance=ExtResource( 7 )]
+[node name="ModelsFrame" parent="Box/Frames" instance=ExtResource( 6 )]
 anchor_right = 0.0
 anchor_bottom = 0.0
 margin_right = 193.0
@@ -63,7 +63,7 @@ script = ExtResource( 4 )
 dragger_stylebox = ExtResource( 5 )
 dragger_hover_stylebox = ExtResource( 3 )
 
-[node name="MaterialsFrame" parent="Box/Frames" instance=ExtResource( 6 )]
+[node name="MaterialsFrame" parent="Box/Frames" instance=ExtResource( 7 )]
 anchor_right = 0.0
 anchor_bottom = 0.0
 margin_left = 205.0
@@ -154,14 +154,14 @@ current_dir = "res://addons/sprite-baker"
 current_path = "res://addons/sprite-baker/"
 
 [node name="Baker" type="Node" parent="." groups=[
-"SpriteBaker.Bake",
 "SpriteBaker.Model",
+"SpriteBaker.Bake",
 ]]
 script = ExtResource( 11 )
 scene3d_path = NodePath("Viewport3D/Scene3D")
 
 [node name="Viewport3D" type="Viewport" parent="Baker"]
-world = SubResource( 2 )
+world = SubResource( 1 )
 transparent_bg = true
 render_target_v_flip = true
 render_target_update_mode = 3
@@ -172,7 +172,7 @@ render_target_update_mode = 3
 
 [node name="SpriteSheet" type="Viewport" parent="Baker"]
 own_world = true
-world = SubResource( 1 )
+world = SubResource( 2 )
 transparent_bg = true
 disable_3d = true
 usage = 0

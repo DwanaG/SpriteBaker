@@ -47,8 +47,6 @@ func set_model(model_: Spatial) -> void:
 		add_child(model)
 		meshes = Tools.find_nodes_by_type("MeshInstance", model)
 		anim_player = Tools.find_single_node_by_type("AnimationPlayer", model)
-		anim_player.method_call_mode = AnimationPlayer.ANIMATION_METHOD_CALL_IMMEDIATE
-		anim_player.playback_process_mode = AnimationPlayer.ANIMATION_PROCESS_MANUAL
 		if anim_player:
 			anim_player.playback_process_mode = AnimationPlayer.ANIMATION_PROCESS_MANUAL
 		skeleton = Tools.find_single_node_by_type("Skeleton", model)

@@ -9,8 +9,8 @@
 [sub_resource type="StyleBoxEmpty" id=1]
 
 [node name="Materials" type="VBoxContainer" groups=[
-"SpriteBaker.Materials",
 "SpriteBaker.Model",
+"SpriteBaker.Materials",
 ]]
 margin_right = 695.0
 margin_bottom = 132.0

@@ -55,16 +55,16 @@ scancode = 16777357
 [sub_resource type="ShortCut" id=11]
 shortcut = SubResource( 10 )
 
-[sub_resource type="World" id=14]
+[sub_resource type="World" id=12]
 environment = ExtResource( 17 )
 
 [sub_resource type="World" id=13]
 environment = ExtResource( 17 )
 
 [node name="Preview" type="VSplitContainer" groups=[
+"SpriteBaker.Model",
 "SpriteBaker.Animation",
 "SpriteBaker.Viewport",
-"SpriteBaker.Model",
 ]]
 anchor_right = 1.0
 anchor_bottom = 1.0
@@ -187,8 +187,8 @@ size_flags_vertical = 3
 tab_align = 0
 
 [node name="3D View" type="ViewportContainer" parent="Box/TabContainer" groups=[
-"SpriteBaker.Viewport",
 "SpriteBaker.Model",
+"SpriteBaker.Viewport",
 ]]
 anchor_right = 1.0
 anchor_bottom = 1.0
@@ -203,15 +203,15 @@ scene3d_path = NodePath("Viewport3D/Scene3D")
 [node name="Viewport3D" type="Viewport" parent="Box/TabContainer/3D View"]
 size = Vector2( 1016, 264 )
 own_world = true
-world = SubResource( 14 )
+world = SubResource( 12 )
 transparent_bg = true
 handle_input_locally = false
 msaa = 1
 render_target_update_mode = 3
 
 [node name="Scene3D" parent="Box/TabContainer/3D View/Viewport3D" groups=[
-"SpriteBaker.Animation",
 "SpriteBaker.Materials",
+"SpriteBaker.Animation",
 ] instance=ExtResource( 2 )]
 
 [node name="Sprite" type="Panel" parent="Box/TabContainer"]
@@ -225,8 +225,8 @@ margin_bottom = -4.0
 custom_styles/panel = ExtResource( 1 )
 
 [node name="SpriteView" type="ViewportContainer" parent="Box/TabContainer/Sprite" groups=[
-"SpriteBaker.Viewport",
 "SpriteBaker.Model",
+"SpriteBaker.Viewport",
 ]]
 anchor_right = 1.0
 anchor_bottom = 1.0
@@ -250,8 +250,8 @@ hdr = false
 render_target_update_mode = 0
 
 [node name="Scene3D" parent="Box/TabContainer/Sprite/SpriteView/Viewport3D" groups=[
-"SpriteBaker.Animation",
 "SpriteBaker.Materials",
+"SpriteBaker.Animation",
 "SpriteBaker.PostProcess",
 ] instance=ExtResource( 2 )]
 
